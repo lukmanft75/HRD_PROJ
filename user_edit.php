@@ -59,7 +59,7 @@
 							<?=$f->select("group_id",$db->fetch_select_data("groups","id","name",[],array("name"),"",true),@$user_details["group_id"],"required","select_form");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
-							<font style="color:red;font-style:italic;">Hidden</font>
+							<font style="color:red;font-style:italic;">Data Status</font>
 							<?=$f->select("hidden",["0"=>"Active","1"=>"Not Active"],@$user_details["hidden"],"required","select_form");?>
 						</div>
 					</div>

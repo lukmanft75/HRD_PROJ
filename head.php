@@ -63,6 +63,8 @@
 	<?php
 		$_rowperpage = 200; 
 		$_max_counting = 100000; 
+		$border_tbl = "";
+		if(@$_GET["export"]){$border_tbl = "border=1px";}
 		
 		if(!$_GET["page"] || $_GET["page"] == 1) {
 			$_limit = "0,".$_rowperpage;

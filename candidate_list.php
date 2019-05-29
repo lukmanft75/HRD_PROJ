@@ -1,5 +1,4 @@
 <?php
-	$border_tbl = "";
 	$_isexport = false;
 	if(@$_GET["export"]){
 		$_exportname = "Candidate_List.xls";
@@ -9,7 +8,6 @@
 		header("Expires: 0");
 		$_GET["do_filter"]="Load";
 		$_isexport = true;
-		$border_tbl = "border=1px";
 	}
 	include_once "head.php";
 	if(GET_url_decode("deleting") > 1 && $__group_id == "0"){

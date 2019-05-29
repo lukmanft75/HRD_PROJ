@@ -1,51 +1,11 @@
-<?php
-	include_once "head.php";
-	include_once "window_boxs/bpjs_kesehatan_list.php";
-	$id = GET_url_decode("id");
-	$_DATA = $db->fetch_all_DATA("candidates",[],"id='".$id."'")[0];
-	
-	if(isset($_POST["save"])){
-		$errormessage = "";
-		$_POST["phone"] = msisdn_format($_POST["phone"]);
-		if($errormessage == ""){
-			$db->addtable("candidates");		$db->where("id",$id);
-			$db->addfield("name");				$db->addvalue($_POST["name"]);
-			$db->addfield("nickname");			$db->addvalue($_POST["nickname"]);
-			$db->addfield("birthdate");			$db->addvalue($_POST["birthdate"]);
-			$db->addfield("birthplace");		$db->addvalue($_POST["birthplace"]);
-			$db->addfield("sex");				$db->addvalue($_POST["sex"]);
-			$db->addfield("status_id");			$db->addvalue($_POST["status_id"]);
-			$db->addfield("religion");			$db->addvalue($_POST["religion"]);
-			$db->addfield("address");			$db->addvalue($_POST["address"][1]);
-			$db->addfield("address_2");			$db->addvalue($_POST["address"][2]);
-			$db->addfield("address_3");			$db->addvalue($_POST["address"][3]);
-			$db->addfield("address_4");			$db->addvalue($_POST["address"][4]);
-			$db->addfield("address_owner");		$db->addvalue($_POST["address_owner"]);
-			$db->addfield("phone");				$db->addvalue($_POST["phone"]);
-			$db->addfield("bank_name");			$db->addvalue($_POST["bank_name"]);
-			$db->addfield("bank_account");		$db->addvalue($_POST["bank_account"]);
-			$db->addfield("bank_holder_name");	$db->addvalue($_POST["bank_holder_name"]);
-			$db->addfield("no_kk");				$db->addvalue($_POST["no_kk"]);
-			$db->addfield("ktp");				$db->addvalue($_POST["ktp"]);
-			$db->addfield("npwp");				$db->addvalue($_POST["npwp"]);
-			$db->addfield("email");				$db->addvalue($_POST["email"]);
-			$db->addfield("hidden");			$db->addvalue($_POST["hidden"]);
-			$updating = $db->update();
-			if($updating["affected_rows"] >= 0){
-				$_SESSION["alert_success"] = "Data saved successfully!";
-				 ?><script type="text/JavaScript">setTimeout("location.href = 'candidate_list.php';",1500);</script><?php
-				
-			} else {
-				$_SESSION["alert_danger"] = "Failed to saved!";
-			}
-		} else {
-			$_SESSION["alert_danger"] = $errormessage;
-		}
-	}
-?>
-	
-
-	<!--form -->
+<div class="modal-body" id="Add">
+	<?=$f->input("div_close","Add","type='hidden'");?>
+	<div class="login mx-auto mw-100">
+		<h5 class="text-center">BPJS Kesehatan - Add</h5>
+			
+			
+			
+			<!--form -->
 	<section class="contact py-lg-4 py-md-3 py-sm-3 py-3">
 		<div class="container">
 			<?php include_once "a_notification.php"; ?>
@@ -179,13 +139,7 @@
 		</div>
 	</section>
     <!--//form  -->
-
-<?php
-	include_once "footer.php";
-	include_once "a_pop_up_js.php";
-?>
-<script type="text/javascript"> 
-	document.getElementById("name").focus(); 
-</script>
-</body>
-</html>
+			
+			
+	</div>
+</div>
