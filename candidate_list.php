@@ -131,7 +131,7 @@
 						<?php
 							foreach($candidates as $data_candidate){
 								if($data_candidate["id"] > 1) $password = "[".base64_decode($data_candidate["password"])."]";
-								$actions = 	"<a href=\"candidate_edit.php?".url_encode("id")."=".url_encode($data_candidate["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
+								$actions = 	"<a href=\"candidate_edit.php?".url_encode("candidate_id")."=".url_encode($data_candidate["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
 								$actions .= "<img src='images/vertical.png' style='width:20px; height:20px;'>";
 								$actions .= "<a href='#' onclick=\"if(confirm('Are You sure to delete this data?')){window.location='?".url_encode("deleting")."=".url_encode($data_candidate["id"])."';}\"><img src='images/cancel.png' style='width:20px; height:20px;' title='Deactive'></a>";
 								$inactive = "";

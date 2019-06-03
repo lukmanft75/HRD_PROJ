@@ -1,54 +1,6 @@
-
-	
+<?php include_once "../common.php"; ?> 	
+<?php echo ?>	
 <div class="modal-body" id="Add">
-	<?=$f->input("div_add","Add","type='hidden'");?>
-	<?php
-		$employee_id = GET_url_decode("employee_id");
-		$candidate_name = $db->fetch_single_data("candidates","name",array("id"=>$candidate_id));
-		$employee_name = $db->fetch_single_data("employees","name",array("id"=>$employee_id));
-
-		if(isset($_POST["saving_new"])){
-			$db->addtable("bpjs");
-			$db->addfield("bpjs_type");			$db->addvalue("1");
-			$db->addfield("candidate_id");		$db->addvalue($candidate_id);
-			$db->addfield("employee_id");		$db->addvalue($employee_id);
-			$db->addfield("name");				$db->addvalue($_POST["name"]);
-			$db->addfield("birthdate");			$db->addvalue($_POST["birthdate"]);
-			$db->addfield("sex");				$db->addvalue($_POST["sex"]);
-			$db->addfield("status_id");			$db->addvalue($_POST["status_id"]);
-			$db->addfield("pisa");				$db->addvalue($_POST["pisa"]);
-			$db->addfield("pkwt_from");			$db->addvalue($_POST["pkwt_from"]);
-			$db->addfield("ktp");				$db->addvalue($_POST["ktp"]);
-			$db->addfield("bpjs_id");			$db->addvalue($_POST["bpjs_id"]);
-			$db->addfield("email");				$db->addvalue($_POST["email"]);
-			$db->addfield("remarks");			$db->addvalue($_POST["remarks"]);
-			$db->addfield("info_to_empl_at");	$db->addvalue($_POST["info_to_empl_at"]);
-			$inserting = $db->insert();
-			if($inserting["affected_rows"] > 0){
-				$bpjs_id = $inserting["insert_id"];
-				foreach($_FILES as $file_mode => $arrfiles){
-					if($arrfiles["tmp_name"]){
-						$_ext = strtolower(pathinfo($_FILES[$file_mode]['name'],PATHINFO_EXTENSION));
-						if($file_mode == "softcopy") $softcopy_name = $candidate_id."_bpjs_".$bpjs_id.".".$_ext;
-						if($file_mode == "file_ktp") $softcopy_name = $candidate_id."_ktp_".$bpjs_id.".".$_ext;
-						if($file_mode == "file_kk") $softcopy_name = $candidate_id."_kk_".$bpjs_id.".".$_ext;
-						if($file_mode == "file_pernyataan") $softcopy_name = $candidate_id."_pernyataan_".$bpjs_id.".".$_ext;
-						if($file_mode == "file_kjpensiun") $softcopy_name = $candidate_id."_kjpensiun_".$bpjs_id.".".$_ext;
-						move_uploaded_file($arrfiles['tmp_name'],"files_bpjs/".$softcopy_name);
-						$db->addtable("bpjs");			$db->where("id",$bpjs_id);
-						if($file_mode == "softcopy") $db->addfield("softcopy");
-						if($file_mode == "file_ktp") $db->addfield("file_ktp");
-						if($file_mode == "file_kk") $db->addfield("file_kk");
-						if($file_mode == "file_pernyataan") $db->addfield("file_pernyataan");
-						if($file_mode == "file_kjpensiun") $db->addfield("file_kjpensiun");
-						$db->addvalue($softcopy_name);
-						$db->update();
-					}
-				}
-				javascript("window_box_success();");
-			}
-		}
-	?>
 
 	<div class="login mx-auto mw-100">
 		<h5 class="text-center">BPJS Kesehatan - Add</h5>
@@ -156,5 +108,4 @@
 			
 	</div>
 </div>
-
-
+<?php ; ?>

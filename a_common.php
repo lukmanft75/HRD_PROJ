@@ -15,10 +15,11 @@
 	$__is_seeker 				= false;
 	$__phpself 					= basename($_SERVER["PHP_SELF"]);
 	$__http_referer 			= basename(@$_SERVER["HTTP_REFERER"]);
+	// $base_url 				= basename($_SERVER["PHP_SELF"])."?".$_SERVER["QUERY_STRING"];
+	$__base_url 				= basename($_SERVER["PHP_SELF"])."?".$_SERVER["QUERY_STRING"];
 	$__now						= date("Y-m-d H:i:s");
 	$__main_menu_id				= 0;
 	$__remoteaddr = $_SERVER["REMOTE_ADDR"];
-	$base_url = basename($_SERVER["PHP_SELF"])."?".$_SERVER["QUERY_STRING"];
 
 	
 	

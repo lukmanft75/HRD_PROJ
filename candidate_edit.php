@@ -1,7 +1,7 @@
 <?php
 	include_once "head.php";
 	include_once "window_boxs/bpjs_kesehatan_list.php";
-	$id = GET_url_decode("id");
+	$id = GET_url_decode("candidate_id");
 	$_DATA = $db->fetch_all_DATA("candidates",[],"id='".$id."'")[0];
 	
 	if(isset($_POST["save"])){
@@ -44,7 +44,12 @@
 	}
 ?>
 	
+							<?=$f->input("","Details BPJS Kesehatan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#bpjs_kesehatan'", "btn btn-light");?>
 
+							
+							
+							
+							
 	<!--form -->
 	<section class="contact py-lg-4 py-md-3 py-sm-3 py-3">
 		<div class="container">
@@ -158,7 +163,7 @@
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">BPJS Kesehatan</font>
-							<?=$f->input("","Details BPJS Kesehatan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#bpjs_kesehatan'", "btn btn-light");?>
+							<?=$f->input("kesehatan","Details BPJS Kesehatan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#bpjs_kesehatan'", "btn btn-light");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">BPJS Ketenagakerjaan</font>
@@ -186,6 +191,12 @@
 ?>
 <script type="text/javascript"> 
 	document.getElementById("name").focus(); 
+	
+	function window_box_success(){
+		// alert('<?=$__base_url;?>');
+		$('#List').load('<?=$__base_url;?> #List');
+		document.getElementById("kesehatan").click();
+	}
 </script>
 </body>
 </html>
