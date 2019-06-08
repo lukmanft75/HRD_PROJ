@@ -1,6 +1,5 @@
 <?php
 	include_once "head.php";
-	include_once "window_boxs/bpjs_kesehatan_list.php";
 	$id = GET_url_decode("candidate_id");
 	$_DATA = $db->fetch_all_DATA("candidates",[],"id='".$id."'")[0];
 	
@@ -34,7 +33,6 @@
 			if($updating["affected_rows"] >= 0){
 				$_SESSION["alert_success"] = "Data saved successfully!";
 				 ?><script type="text/JavaScript">setTimeout("location.href = 'candidate_list.php';",1500);</script><?php
-				
 			} else {
 				$_SESSION["alert_danger"] = "Failed to saved!";
 			}
@@ -44,7 +42,7 @@
 	}
 ?>
 	
-							<?=$f->input("","Details BPJS Kesehatan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#bpjs_kesehatan'", "btn btn-light");?>
+	<?=$f->input("","Details BPJS Ketenagakerjaan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/bpjs_kesehatan_list.php?candidate_id=".$id."\")'", "btn btn-light");?>
 
 							
 							
@@ -163,11 +161,11 @@
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">BPJS Kesehatan</font>
-							<?=$f->input("kesehatan","Details BPJS Kesehatan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#bpjs_kesehatan'", "btn btn-light");?>
+							<?=$f->input("kesehatan","Details BPJS Kesehatan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/bpjs_kesehatan_list.php?candidate_id=".$id."\")'", "btn btn-light");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">BPJS Ketenagakerjaan</font>
-							<?=$f->input("","Details BPJS Ketenagakerjaan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#bpjs_ketenagakerjaan'", "btn btn-light");?>
+							<?=$f->input("ketenagakerjaan","Details BPJS Ketenagakerjaan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/bpjs_ketenagakerjaan_list.php?candidate_id=".$id."\")'", "btn btn-light");?>
 						</div>
 					</div>
 					<div class="form-group">
@@ -188,6 +186,7 @@
 <?php
 	include_once "footer.php";
 	include_once "a_pop_up_js.php";
+	include_once "window_boxs/wb_default.php";
 ?>
 <script type="text/javascript"> 
 	document.getElementById("name").focus(); 
