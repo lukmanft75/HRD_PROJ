@@ -42,7 +42,7 @@
 	}
 ?>
 	
-	<?=$f->input("","Details BPJS Ketenagakerjaan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/bpjs_kesehatan_list.php?candidate_id=".$id."\")'", "btn btn-light");?>
+	<?=$f->input("","Details BPJS Ketenagakerjaan","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/bpjs_ketenagakerjaan_list.php?candidate_id=".$id."\")'", "btn btn-light");?>
 
 							
 							

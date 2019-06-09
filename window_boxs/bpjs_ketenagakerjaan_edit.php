@@ -16,6 +16,7 @@
 			if(isset($_POST["saving_new"])){
 				$db->addtable("bpjs");				$db->where("id",$bpjs_id);
 				$db->addfield("name");				$db->addvalue($_POST["name"]);
+				$db->addfield("mothers_name");		$db->addvalue($_POST["mothers_name"]);
 				$db->addfield("birthdate");			$db->addvalue($_POST["birthdate"]);
 				$db->addfield("sex");				$db->addvalue($_POST["sex"]);
 				$db->addfield("status_id");			$db->addvalue($_POST["status_id"]);
@@ -33,15 +34,11 @@
 							$_ext = strtolower(pathinfo($_FILES[$file_mode]['name'],PATHINFO_EXTENSION));
 							if($file_mode == "softcopy") $softcopy_name = $candidate_id."_bpjs_".$bpjs_id.".".$_ext;
 							if($file_mode == "file_ktp") $softcopy_name = $candidate_id."_ktp_".$bpjs_id.".".$_ext;
-							if($file_mode == "file_kk") $softcopy_name = $candidate_id."_kk_".$bpjs_id.".".$_ext;
-							if($file_mode == "file_pernyataan") $softcopy_name = $candidate_id."_pernyataan_".$bpjs_id.".".$_ext;
 							if($file_mode == "file_kjpensiun") $softcopy_name = $candidate_id."_kjpensiun_".$bpjs_id.".".$_ext;
 							move_uploaded_file($arrfiles['tmp_name'],"../files_bpjs/".$softcopy_name);
 							$db->addtable("bpjs");			$db->where("id",$bpjs_id);
 							if($file_mode == "softcopy") $db->addfield("softcopy");
 							if($file_mode == "file_ktp") $db->addfield("file_ktp");
-							if($file_mode == "file_kk") $db->addfield("file_kk");
-							if($file_mode == "file_pernyataan") $db->addfield("file_pernyataan");
 							if($file_mode == "file_kjpensiun") $db->addfield("file_kjpensiun");
 							$db->addvalue($softcopy_name);
 							$db->update();
@@ -56,7 +53,7 @@
 		?>
 
 		<div class="login mx-auto mw-100">
-			<h5 class="text-center">BPJS Kesehatan - Edit</h5>
+			<h5 class="text-center">BPJS Ketenagakerjaan - Edit</h5>
 				
 				<!--form -->
 				<section class="contact py-lg-4 py-md-3 py-sm-3 py-3">
@@ -131,30 +128,28 @@
 								</div>
 								<div class="row wls-contact-mid">
 									<div class="col-md-6 col-sm-6 form-group contact-forms">
+										<font style="color:#1a75ff;font-style:italic;">Mother's Name</font>
+										<?=$f->input("mothers_name",@$bpjs_details["mothers_name"],"","form-control");?>
+									</div>
+									<div class="col-md-6 col-sm-6 form-group contact-forms">
 										<font style="color:#1a75ff;font-style:italic;">Softcopy BPJS
 										<?php if(@$bpjs_details["softcopy"] != "") echo " <a href=\"../files_bpjs/".@$bpjs_details["softcopy"]."\" target=\"_BLANK\" style='color:blue;'>- ".$bpjs_details["softcopy"]."</a>";?>
 										</font>
 										<?=$f->input("softcopy","","type='file'","form-control");?>
 									</div>
+								</div>
+								<div class="row wls-contact-mid">
 									<div class="col-md-6 col-sm-6 form-group contact-forms">
 										<font style="color:#1a75ff;font-style:italic;">Softcopy KTP
 										<?php if(@$bpjs_details["file_ktp"] != "") echo " <a href=\"../files_bpjs/".@$bpjs_details["file_ktp"]."\" target=\"_BLANK\" style='color:blue;'>- ".$bpjs_details["file_ktp"]."</a>";?>
 										</font>
 										<?=$f->input("file_ktp","","type='file'","form-control");?>
 									</div>
-								</div>
-								<div class="row wls-contact-mid">
 									<div class="col-md-6 col-sm-6 form-group contact-forms">
-										<font style="color:#1a75ff;font-style:italic;">Softcopy KK
-										<?php if(@$bpjs_details["file_kk"] != "") echo " <a href=\"../files_bpjs/".@$bpjs_details["file_kk"]."\" target=\"_BLANK\" style='color:blue;'>- ".$bpjs_details["file_kk"]."</a>";?>
+										<font style="color:#1a75ff;font-style:italic;">Softcopy KJP
+										<?php if(@$bpjs_details["file_kjpensiun"] != "") echo " <a href=\"../files_bpjs/".@$bpjs_details["file_kjpensiun"]."\" target=\"_BLANK\" style='color:blue;'>- ".$bpjs_details["file_kjpensiun"]."</a>";?>
 										</font>
-										<?=$f->input("file_kk","","type='file'","form-control");?>
-									</div>
-									<div class="col-md-6 col-sm-6 form-group contact-forms">
-										<font style="color:#1a75ff;font-style:italic;">Surat Pernyataan
-										<?php if(@$bpjs_details["file_pernyataan"] != "") echo " <a href=\"../files_bpjs/".@$bpjs_details["file_pernyataan"]."\" target=\"_BLANK\" style='color:blue;'>- ".$bpjs_details["file_pernyataan"]."</a>";?>
-										</font>
-										<?=$f->input("file_pernyataan","","type='file'","form-control");?>
+										<?=$f->input("file_kjpensiun","","type='file'","form-control");?>
 									</div>
 								</div>
 								<div class="text-left click-subscribe">
