@@ -25,7 +25,7 @@
 }
 @media (min-width:1200px){
 	#wb_content_main{
-		max-width:1000px !important;
+		max-width:800px !important;
 	}
 	#wb_content{
 		height:500px;
