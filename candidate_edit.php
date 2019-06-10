@@ -42,11 +42,6 @@
 	}
 ?>
 	
-
-							
-							
-							
-							
 	<!--form -->
 	<section class="contact py-lg-4 py-md-3 py-sm-3 py-3">
 		<div class="container">

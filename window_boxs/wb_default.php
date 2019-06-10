@@ -12,7 +12,7 @@
 		max-width:650px !important;
 	}
 	#wb_content{
-		height:400px;
+		height:450px;
 	}
 }
 @media (min-width:992px){
