@@ -38,7 +38,7 @@
 		<div class="modal-dialog modal-dialog-centered" id="wb_content_main"role="document">
 			<div class="modal-content" id="wb_content">
 				<div class="modal-header text-center">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<button type="button" id="close_window" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true" id="close_window">&times;</span>
 					</button>
 				</div>
@@ -48,10 +48,12 @@
 			</div>
 		</div>
 	</div>
-
 	<script type="text/javascript"> 
 		function SetPage(url){
 			document.getElementById("wb_iframe").setAttribute("src", url);
 		}
+		window.closeModal = function(){
+			$('#window_boxs').modal('hide');
+		};
 	</script>
 </body>

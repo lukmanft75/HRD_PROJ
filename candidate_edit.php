@@ -5,7 +5,7 @@
 	
 	if(isset($_POST["save"])){
 		$errormessage = "";
-		$_POST["phone"] = msisdn_format($_POST["phone"]);
+		$_POST["phone_2"] = msisdn_format($_POST["phone_2"]);
 		if($errormessage == ""){
 			$db->addtable("candidates");		$db->where("id",$id);
 			$db->addfield("name");				$db->addvalue($_POST["name"]);
@@ -15,12 +15,14 @@
 			$db->addfield("sex");				$db->addvalue($_POST["sex"]);
 			$db->addfield("status_id");			$db->addvalue($_POST["status_id"]);
 			$db->addfield("religion");			$db->addvalue($_POST["religion"]);
+			$db->addfield("nationality");		$db->addvalue($_POST["nationality"]);
 			$db->addfield("address");			$db->addvalue($_POST["address"][1]);
 			$db->addfield("address_2");			$db->addvalue($_POST["address"][2]);
 			$db->addfield("address_3");			$db->addvalue($_POST["address"][3]);
 			$db->addfield("address_4");			$db->addvalue($_POST["address"][4]);
 			$db->addfield("address_owner");		$db->addvalue($_POST["address_owner"]);
 			$db->addfield("phone");				$db->addvalue($_POST["phone"]);
+			$db->addfield("phone_2");			$db->addvalue($_POST["phone_2"]);
 			$db->addfield("bank_name");			$db->addvalue($_POST["bank_name"]);
 			$db->addfield("bank_account");		$db->addvalue($_POST["bank_account"]);
 			$db->addfield("bank_holder_name");	$db->addvalue($_POST["bank_holder_name"]);
@@ -91,36 +93,46 @@
 					</div>
 					<div class="form-group contact-forms">
 						<font style="color:#1a75ff;font-style:italic;">Address</font>
-						<?=$f->textarea("address[1]",@$_DATA["address"][1],"placeholder='' rows='3'","form-control");?>
+						<?=$f->textarea("address[1]",@$_DATA["address"],"placeholder='' rows='3'","form-control");?>
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Sub-District</font>
-							<?=$f->input("address[2]",@$_DATA["address"][2],"placeholder=''","form-control");?>
+							<?=$f->input("address[2]",@$_DATA["address_2"],"placeholder=''","form-control");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">City</font>
-							<?=$f->input("address[3]",@$_DATA["address"][3],"placeholder=''","form-control");?>
+							<?=$f->input("address[3]",@$_DATA["address_3"],"placeholder=''","form-control");?>
 						</div>
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Province</font>
-							<?=$f->input("address[4]",@$_DATA["address"][4],"placeholder=''","form-control");?>
+							<?=$f->input("address[4]",@$_DATA["address_4"],"placeholder=''","form-control");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
-							<font style="color:#1a75ff;font-style:italic;">Owner of the address</font>
-							<?=$f->select("address_owner",["own" => "Own","parent_family" => "Parent/Familiy","rent_lease" => "Rent/Lease"],@$_DATA["address_owner"],"","select_form");?>
+							<font style="color:#1a75ff;font-style:italic;">Nationality</font>
+							<?=$f->input("nationality",@$_DATA["nationality"],"placeholder=''","form-control");?>
 						</div>
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Owner of the address</font>
+							<?=$f->select("address_owner",["own" => "Own","parent_family" => "Parent/Familiy","rent_lease" => "Rent/Lease"],@$_DATA["address_owner"],"","select_form");?>
+						</div>
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Religion</font>
 							<?=$f->input("religion",@$_DATA["religion"],"placeholder=''","form-control");?>
 						</div>
+					</div>
+					<div class="row wls-contact-mid">
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Phone</font>
+							<?=$f->input("phone",@$_DATA["phone"],"placeholder=''","form-control");?>
+						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Handphone</font>
-							<?=$f->input("phone",@$_DATA["phone"],"placeholder='' type='number'","form-control");?>
+							<?=$f->input("phone_2",@$_DATA["phone_2"],"placeholder=''","form-control");?>
 						</div>
 					</div>
 					<div class="row wls-contact-mid">
@@ -130,7 +142,7 @@
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Bank Account</font>
-							<?=$f->input("bank_account",@$_DATA["bank_account"],"placeholder='' type='number'","form-control");?>
+							<?=$f->input("bank_account",@$_DATA["bank_account"],"placeholder=''","form-control");?>
 						</div>
 					</div>
 					<div class="row wls-contact-mid">
@@ -178,6 +190,7 @@
 					<div class="text-left click-subscribe">
 						<?=$f->input("save","Save","type='submit'","btn btn-primary");?>
 						<?=$f->input("back","Back","type='button' onclick=\"window.location='".str_replace("_edit","_list",$_SERVER["PHP_SELF"])."';\"","btn btn-secondary");?>
+						<?=$f->input("view","View","type='button' onclick=\"window.location='".str_replace("_edit","_view",$_SERVER["PHP_SELF"])."?".$_SERVER["QUERY_STRING"]."';\"","btn btn-info");?>
 					</div>
 				<?=$f->end();?>
 				
@@ -193,12 +206,6 @@
 ?>
 <script type="text/javascript"> 
 	document.getElementById("name").focus(); 
-	
-	function window_box_success(){
-		// alert('<?=$__base_url;?>');
-		$('#List').load('<?=$__base_url;?> #List');
-		document.getElementById("kesehatan").click();
-	}
 </script>
 </body>
 </html>

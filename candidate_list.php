@@ -111,7 +111,7 @@
 			
 			<?php  if(!$_isexport){ include "a_pagination.php"; }?>
 			<div class="bd-example mb-4">
-				<div style="overflow-x:auto;">
+				<div style="overflow-x:auto; position: relative; height: 60%; overflow: auto; display: block;">
 					<?=$t->start($border_tbl,"","data_content");?>
 						<?=$t->header(["No",
 										"Action",
@@ -130,8 +130,9 @@
 										"<div onclick=\"sorting('created_at');\">Created At</div>"]);?>
 						<?php
 							foreach($candidates as $data_candidate){
-								if($data_candidate["id"] > 1) $password = "[".base64_decode($data_candidate["password"])."]";
-								$actions = 	"<a href=\"candidate_edit.php?".url_encode("candidate_id")."=".url_encode($data_candidate["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
+								$actions = 	"<a href=\"candidate_view.php?".url_encode("candidate_id")."=".url_encode($data_candidate["id"])."\"><img src='images/view.png' style='width:20px; height:20px;' title='View'></a>";
+								$actions .= "<img src='images/vertical.png' style='width:20px; height:20px;'>";
+								$actions .= "<a href=\"candidate_edit.php?".url_encode("candidate_id")."=".url_encode($data_candidate["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
 								if($__group_id == "0") {
 									$actions .= "<img src='images/vertical.png' style='width:20px; height:20px;'>";
 									$actions .= "<a href='#' onclick=\"if(confirm('Are You sure to delete this data?')){window.location='?".url_encode("deleting")."=".url_encode($data_candidate["id"])."';}\"><img src='images/cancel.png' style='width:20px; height:20px;' title='Deactive'></a>";
@@ -160,7 +161,7 @@
 									format_tanggal($data_candidate["created_at"],"d M Y")
 								],[
 									"style='width:3%' align=right nowrap",
-									"style='width:6%;".$inactive."' align='center'",
+									"style='width:8%;".$inactive."' align='center'",
 									"",
 									"",
 									"align='right'",
@@ -180,7 +181,6 @@
 					<?=$t->end();?>
 				</div>
 			</div>
-			<?php  if(!$_isexport){ include "a_pagination.php"; }?>
 		</div>
 	</section>
 	<!--//Table-->

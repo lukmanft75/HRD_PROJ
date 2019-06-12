@@ -1,7 +1,7 @@
 <?php
 	$_isexport = false;
 	if(@$_GET["export"]){
-		$_exportname = "Candidate_List.xls";
+		$_exportname = "Employee_List.xls";
 		header("Content-type: application/x-msdownload");
 		header("Content-Disposition: attachment; filename=".$_exportname);
 		header("Pragma: no-cache");
@@ -10,13 +10,13 @@
 		$_isexport = true;
 	}
 	include_once "head.php";
-	if(GET_url_decode("deleting") > 1 && $__group_id == "0"){
-		$db->addtable("candidates");			$db->where("id",GET_url_decode("deleting"));
-		$db->addfield("hidden");		$db->addvalue("1");
+	if(GET_url_decode("deleting") && $__group_id == "0"){
+		$db->addtable("employees");			$db->where("id",GET_url_decode("deleting"));
+		$db->addfield("hidden");			$db->addvalue("1");
 		$update = $db->update();
 		$_SESSION["alert_success"] = "Data deleted successfully!";
 		?>
-			<script type="text/JavaScript">setTimeout("location.href = 'candidate_list.php';",1500);</script>
+			<script type="text/JavaScript">setTimeout("location.href = 'employee_list.php';",1500);</script>
 		<?php
 	}
 	
@@ -83,15 +83,15 @@
 			<?php
 				$whereclause = "";
 				if(@$__group_id > 0)	$whereclause .= "hidden = '0' AND ";
-				if(@$_GET["name"]!="") $whereclause .= "name LIKE '"."%".str_replace(" ","%",$_GET["name"])."%"."' AND ";
-				if(@$_GET["year"]!="") $whereclause .= "birthdate LIKE '".str_replace(" ","%",$_GET["year"])."-%"."' AND ";
-				if(@$_GET["sex"]!="") $whereclause .= "sex = '".$_GET["sex"]."' AND ";
-				if(@$_GET["status_id"]!="") $whereclause .= "status_id = '".$_GET["sex"]."' AND ";
-				if(@$_GET["address"]!="") $whereclause .= "(address LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR 
-															address_2 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR
-															address_3 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR
-															address_4 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."'
-															) AND ";
+				// if(@$_GET["name"]!="") $whereclause .= "name LIKE '"."%".str_replace(" ","%",$_GET["name"])."%"."' AND ";
+				// if(@$_GET["year"]!="") $whereclause .= "birthdate LIKE '".str_replace(" ","%",$_GET["year"])."-%"."' AND ";
+				// if(@$_GET["sex"]!="") $whereclause .= "sex = '".$_GET["sex"]."' AND ";
+				// if(@$_GET["status_id"]!="") $whereclause .= "status_id = '".$_GET["sex"]."' AND ";
+				// if(@$_GET["address"]!="") $whereclause .= "(address LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR 
+															// address_2 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR
+															// address_3 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR
+															// address_4 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."'
+															// ) AND ";
 
 				$db->addtable("employees");
 				if($whereclause != "") $db->awhere(substr($whereclause,0,-4));$db->limit($_max_counting);
@@ -193,58 +193,97 @@
 					<?=$t->header(["Hitungan Bulan","Hitungan Tahun"]);?>
 					
 						<?php
-							foreach($candidates as $data_candidate){
-								if($data_candidate["id"] > 1) $password = "[".base64_decode($data_candidate["password"])."]";
-								$actions = 	"<a href=\"candidate_edit.php?".url_encode("candidate_id")."=".url_encode($data_candidate["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
-								if($__group_id == "0") {
+							foreach($employees as $data_employee){
+								$actions = 	"<a href=\"employee_view.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\"><img src='images/view.png' style='width:20px; height:20px;' title='View'></a>";
+								$actions .= "<img src='images/vertical.png' style='width:20px; height:20px;'>";
+								$actions .= "<a href=\"employee_edit.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
+								if($data_employee["hidden"] == 0 && $__group_id == "0") {
 									$actions .= "<img src='images/vertical.png' style='width:20px; height:20px;'>";
-									$actions .= "<a href='#' onclick=\"if(confirm('Are You sure to delete this data?')){window.location='?".url_encode("deleting")."=".url_encode($data_candidate["id"])."';}\"><img src='images/cancel.png' style='width:20px; height:20px;' title='Deactive'></a>";
+									$actions .= "<a href='#' onclick=\"if(confirm('Are You sure to delete this data?')){window.location='?".url_encode("deleting")."=".url_encode($data_employee["id"])."';}\"><img src='images/cancel.png' style='width:20px; height:20px;' title='Deactive'></a>";
 								}
-								$inactive = "";
-								$address = $data_candidate["address"];
-								if($data_candidate["address_2"]) $address .= ", ".$data_candidate["address_2"];
-								if($data_candidate["address_3"]) $address .= ", ".$data_candidate["address_3"];
-								if($data_candidate["address_4"]) $address .= ", ".$data_candidate["address_4"];
-								if($__group_id == 0 && $data_candidate["hidden"] == 1) $inactive = "background-color:#ff8080;";
-								echo $t->row([
-									$start++,
-									$actions,
-									$data_candidate["code"],
-									ucwords($data_candidate["name"]),
-									format_tanggal($data_candidate["birthdate"],"d M Y"),
-									$data_candidate["sex"],
-									$db->fetch_single_data("statuses","name",["id" => $data_candidate["status_id"]]),
-									$address,
-									$data_candidate["phone"],
-									$data_candidate["bank_name"],
-									$data_candidate["bank_account"],
-									$data_candidate["ktp"],
-									$data_candidate["npwp"],
-									$data_candidate["email"],
-									format_tanggal($data_candidate["created_at"],"d M Y")
-								],[
-									"style='width:3%' align=right nowrap",
-									"style='width:6%;".$inactive."' align='center'",
-									"",
-									"",
-									"align='right'",
-									"align='center'",
-									"align='center'",
-									"",
-									"align='right'",
-									"",
-									"align='right'",
-									"align='right'",
-									"align='right'",
-									"",
-									"align='right'"
-								]);
+								
+								$poh = $db->fetch_single_data("employee_payroll_params","params_value",["param" => "Point Of Hire:LIKE", "employee_id" => $data_employee["id"]]);
+			
+								$datetime1 = date_create($data_employee["join_indohr_at"]);
+								$datetime2 = date_create(date("Y-m-d"));
+								$interval = date_diff($datetime1, $datetime2);
+								$lamakerja_bln = ($interval->format('%Y Tahun') * 12 + $interval->format('%m'))." Bulan";
+								$lamakerja_yrs = $interval->format('%Y Tahun')." ".$interval->format('%m Bulan');
+								
+								$spouse_birth = $db->fetch_single_data("employee_families","birthplace",["employee_id" => $data_employee["id"],"relation_id" => 2]);
+								if($spouse_birth != "") $spouse_birth .= ", ".format_tanggal($db->fetch_single_data("employee_families","birthdate",["employee_id" => $data_employee["id"],"relation_id" => 2]));
+								
+								$child_birth_1s = $db->fetch_all_data("employee_families",[],"employee_id = '".$data_employee["id"]."' AND relation_id='4' ORDER BY birthdate")[0];
+								$child_sex_1 = $child_birth_1s["sex"];
+								$child_name_1 = $child_birth_1s["fullname"];
+								$child_birth_1 = "";
+								if($child_birth_1s["birthplace"] != "") $child_birth_1 = $child_birth_1s["birthplace"].", ".format_tanggal($child_birth_1s["birthdate"]);
+								
+								$child_birth_2s = $db->fetch_all_data("employee_families",[],"employee_id = '".$data_employee["id"]."' AND relation_id='4' ORDER BY birthdate")[1];
+								$child_sex_2 = $child_birth_2s["sex"];
+								$child_name_2 = $child_birth_2s["fullname"];
+								$child_birth_2 = "";
+								if($child_birth_2s["birthplace"] != "") $child_birth_2 = $child_birth_2s["birthplace"].", ".format_tanggal($child_birth_2s["birthdate"]);
+								
+								$child_birth_3s = $db->fetch_all_data("employee_families",[],"employee_id = '".$data_employee["id"]."' AND relation_id='4' ORDER BY birthdate")[2];
+								$child_sex_3 = $child_birth_3s["sex"];
+								$child_name_3 = $child_birth_3s["fullname"];
+								$child_birth_3 = "";
+								if($child_birth_3s["birthplace"] != "") $child_birth_3 = $child_birth_3s["birthplace"].", ".format_tanggal($child_birth_3s["birthdate"]);
+								
+								
+								if($data_employee["employed_as_csr"] == "2") {$csr = "Yes";} else {$csr = "";}
+								
+								$address = $data_employee["address"];
+								if($data_employee["address_2"] != "") $address .= ", ".$data_employee["address_2"];
+								if($data_employee["address_3"] != "") $address .= ", ".$data_employee["address_3"];
+								if($data_employee["address_4"] != "") $address .= ", ".$data_employee["address_4"];
+								if($employee["employed_as_csr"] == "2") {$csr = "Yes";} else {$csr = "";}
+									$arr_rows = [$start++];
+									if(!$_isexport) array_push($arr_rows,$actions);
+									array_push(
+										$arr_rows,
+										ucwords($data_employee["name"]),
+										$data_employee["code"],
+										$data_employee["birthplace"].", ".format_tanggal($data_employee["birthdate"],"d M Y"),
+										$db->fetch_all_data("employee_payroll_params",[],"employee_id = '".$data_employee["id"]."' AND param LIKE 'Position' AND valid_at <= '".date("Y-m-d")."'","valid_at DESC,id DESC")[0]["params_value"],
+										$poh,
+										$db->fetch_all_data("employee_payroll_params",[],"employee_id = '".$data_employee["id"]."' AND param LIKE 'Recruitment Status' AND valid_at <= '".date("Y-m-d")."'","valid_at DESC,id DESC")[0]["params_value"],
+										format_tanggal($data_employee["join_indohr_at"]),
+										format_tanggal($db->fetch_all_data("employee_payroll_params",[],"employee_id = '".$data_employee["id"]."' AND param LIKE 'Resign/Termination Date' AND valid_at <= '".date("Y-m-d")."'","valid_at DESC,id DESC")[0]["params_value"]),
+										$lamakerja_bln,
+										$lamakerja_yrs,
+										$cutitahunan,
+										$db->fetch_all_data("employee_payroll_params",[],"employee_id = '".$data_employee["id"]."' AND param LIKE 'Contract Status' AND valid_at <= '".date("Y-m-d")."'","valid_at DESC,id DESC")[0]["params_value"],
+										$data_employee["bank_account"],
+										$data_employee["sex"],
+										"&nbsp;".$data_employee["ktp"],
+										"&nbsp;".$data_employee["npwp"],
+										$data_employee["address"],
+										$db->fetch_all_data("employee_payroll_params",[],"employee_id = '".$data_employee["id"]."' AND param LIKE 'Status' AND valid_at <= '".date("Y-m-d")."'","valid_at DESC,id DESC")[0]["params_value"],
+										$db->fetch_single_data("employee_families","fullname",["employee_id" => $data_employee["id"],"relation_id" => 2]),
+										$spouse_birth,
+										$child_name_1,
+										$child_birth_1,
+										$child_sex_1,
+										$child_name_2,
+										$child_birth_2,
+										$child_sex_2,
+										$child_name_3,
+										$child_birth_3,
+										$child_sex_3,
+										"&nbsp;".$data_employee["emergency_no1"],
+										$data_employee["emergency_name1"],
+										$data_employee["emergency_relation1"],
+										"&nbsp;".$data_employee["emergency_no2"],
+										$data_employee["emergency_name2"],
+										$data_employee["emergency_relation2"]);
+								echo $t->row($arr_rows,["align='right' valign='top'","nowrap"]);
 							}
 						?>
 					<?=$t->end();?>
 				</div>
 			</div>
-			<?php  if(!$_isexport){ include "a_pagination.php"; }?>
 		</div>
 	</section>
 	<!--//Table-->

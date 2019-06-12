@@ -102,7 +102,7 @@
 			
 			<?php  if(!$_isexport){ include "a_pagination.php"; }?>
 			<div class="bd-example mb-4">
-				<div style="overflow-x:auto;">
+				<div style="overflow-x:auto; position: relative; height: 60%; overflow: auto; display: block;">
 					<?=$t->start($border_tbl,"","data_content");?>
 						<?=$t->header(["No",
 										"Action",
@@ -131,7 +131,6 @@
 					<?=$t->end();?>
 				</div>
 			</div>
-			<?php  if(!$_isexport){ include "a_pagination.php"; }?>
 		</div>
 	</section>
 	<!--//Table-->
