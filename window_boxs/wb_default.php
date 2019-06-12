@@ -57,9 +57,14 @@
 			$('#window_boxs').modal('hide');
 		};
 		
-		window.Passing = function(code){
-			document.getElementById("code_employee").value=code;
-			$('#window_boxs').modal('hide');
+		window.Passing = function(page,code){
+			if(page != ''){
+				$('#window_boxs').modal('hide');
+				window.location=page;
+			} else {
+				document.getElementById("code_employee").value=code;
+				$('#window_boxs').modal('hide');
+			}
 		};
 	</script>
 </body>

@@ -50,13 +50,13 @@
 			<?php include_once "a_notification.php"; ?>
 			<div class="sub-head mb-3 ">
 				<h4>Candidate Edit</h4>
-			<?=$f->input("","Courses","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_course_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
-			<?=$f->input("","Educations","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_education_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
-			<?=$f->input("","Families","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_family_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
-			<?=$f->input("","Info","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_info_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
-			<?=$f->input("","Last Benefits","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_last_benefit_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
-			<?=$f->input("","Relations","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_relation_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
-			<?=$f->input("","Work Experiences","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_work_exp_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Courses","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_course_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Educations","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_education_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Families","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_family_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Info","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_info_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Last Benefits","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_last_benefit_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Relations","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_relation_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
+				<?=$f->input("","Work Experiences","type='button' style='text-align:left !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/cand_work_exp_list.php?candidate_id=".$id."\")'", "btn btn-info");?>
 			</div>
 			<div class="info-para">
 			

@@ -159,8 +159,7 @@
 							}
 							?><script> 
 									alert("Data kandidat sudah tersimpan sebagai Karyawan");
-									window.parent.closeModal();
-									window.parent.location.href="../employee_view.php?<?=url_encode("employee_id");?>=<?=url_encode($employee_id);?>";
+									window.parent.Passing('../employee_edit.php?<?=url_encode("employee_id");?>=<?=url_encode($employee_id);?>','<?=$_GET["code"];?>');
 							</script><?php
 						} else {
 							?><script> 
@@ -170,7 +169,7 @@
 						}
 					} else {
 						?><script> 
-							window.parent.Passing('<?=$_GET["code"];?>');
+							window.parent.Passing('','<?=$_GET["code"];?>');
 						</script><?php
 					}
 				}
