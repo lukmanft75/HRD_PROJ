@@ -1,5 +1,6 @@
 <?php include_once "wb_head.php" ;?>
 <?php include_once "../employee_func.php";?>
+
 <body>	
 	<div class="modal-body" id="Add">
 		<?php
@@ -167,6 +168,10 @@
 									window.parent.closeModal();
 							</script><?php
 						}
+					} else {
+						?><script> 
+							window.parent.Passing('<?=$_GET["code"];?>');
+						</script><?php
 					}
 				}
 			}

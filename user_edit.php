@@ -18,7 +18,7 @@
 			$updating = $db->update();
 			if($updating["affected_rows"] >= 0){
 				$_SESSION["alert_success"] = "Data saved successfully!";
-				?><script type="text/JavaScript">setTimeout("location.href = 'user_list.php';",1500);</script><?php
+				?><script type="text/JavaScript">setTimeout("location.href = '<?=str_replace("_edit","_list",$_SERVER["PHP_SELF"]);?>';",1500);</script><?php
 			} else {
 				$_SESSION["alert_danger"] = "Failed to saved!";
 			}

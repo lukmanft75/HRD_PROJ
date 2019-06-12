@@ -496,7 +496,7 @@
 		?>
 		<script>
 			window.print();
-			setTimeout("location.href = 'candidate_view.php?<?=url_encode("candidate_id");?>=<?=url_encode($id);?>';",0)
+			setTimeout("location.href = 'candidate_view.php?<?=url_encode("candidate_id");?>=<?=url_encode($id);?>';",0);
 		</script>
 		<?php
 	}

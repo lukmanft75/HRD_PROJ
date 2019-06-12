@@ -19,7 +19,6 @@
 			<script type="text/JavaScript">setTimeout("location.href = 'employee_list.php';",1500);</script>
 		<?php
 	}
-	
 	if(!$_isexport){
 	?>
 	<!--Filter-->

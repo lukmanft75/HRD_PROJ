@@ -52,7 +52,13 @@
 		function SetPage(url){
 			document.getElementById("wb_iframe").setAttribute("src", url);
 		}
+		
 		window.closeModal = function(){
+			$('#window_boxs').modal('hide');
+		};
+		
+		window.Passing = function(code){
+			document.getElementById("code_employee").value=code;
 			$('#window_boxs').modal('hide');
 		};
 	</script>
