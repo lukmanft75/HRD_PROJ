@@ -4,7 +4,7 @@
 	
 	if(isset($_POST["save"])){
 		$code = get_valid_code($_POST["code_employee"]);
-		
+		$_POST["phone"] = msisdn_format($_POST["phone"]);
 		$db->addtable("employees");
 		$db->addfield("code");				$db->addvalue($code);
 		$db->addfield("name");				$db->addvalue($_POST["name"]);

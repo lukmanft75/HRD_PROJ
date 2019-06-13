@@ -1664,6 +1664,13 @@ height: 10em;
 	background-color: white;
 	font-size: 13px;
 }
+.select_form_tb{
+	height:40px;
+	width:100%;
+	border: 1px solid #ced4da;
+	background-color: white;
+	font-size: 13px;
+}
 
 .select_filter{
 	height:40px;

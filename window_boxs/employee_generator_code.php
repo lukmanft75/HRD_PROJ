@@ -4,13 +4,6 @@
 <body>	
 	<div class="modal-body" id="Add">
 		<?php
-		//
-		//
-		echo $__base_url;
-		//
-		//
-		
-		
 			$candidate_id	= $_GET["candidate_id"];
 			$candidate_name = $db->fetch_single_data("candidates","name",array("id"=>$candidate_id));
 			$employee_id	= $_GET["employee_id"];
