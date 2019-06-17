@@ -64,7 +64,7 @@
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Birthplace</font>
-							<?=$f->input("birthplace",@$_POST["birthplace"],"placeholder='' required","form-control");?>
+							<?=$f->input("birthplace",@$_POST["birthplace"],"placeholder=''","form-control");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Birthdate</font>

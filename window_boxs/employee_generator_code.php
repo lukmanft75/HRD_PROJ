@@ -30,7 +30,10 @@
 					$db->addtable("employees");$db->addfield("code");$db->addvalue($employee_code);$db->where("id",$_GET["employee_id"]);
 					$updating = $db->update();
 					if($updating["affected_rows"] > 0){
-						?> <script> //parent_load('<?=$_GET["elm_return"];?>','<?=$employee_code;?>','<?=$_GET["join_date"];?>'); </script> <?php
+						?><script> 
+								alert("Code sudah berhasil di Update!");
+								window.parent.Passing('../employee_payroll_setting_list.php');
+						</script><?php
 					}
 				} else {
 					if($_GET["process_to_employee"] == "1"){

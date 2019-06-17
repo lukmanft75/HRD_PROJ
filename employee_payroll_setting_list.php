@@ -91,7 +91,6 @@
 			<div class="sub-head mb-3 ">
 			<?php include_once "a_notification.php"; ?>
 				<h4>Employee List</h4>
-					<?=$f->input("add","Add","type='button' onclick=\"window.location='employee_add.php';\"", "btn btn-primary");?>
 					<?=$f->input("filter","Filter","type='button' data-toggle='modal' data-target='#filter_box'", "btn btn-success");?>
 			</div>
 			
@@ -159,6 +158,7 @@
 					
 						<?php
 							foreach($employees as $data_employee){
+								$generate = $f->input("code_generate","","type='hidden' style='width: 1px !important;' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/employee_generator_code.php?employee_id=".$data_employee["id"]."&updating_table=true\")'", "");
 								$actions = 	"<a href=\"employee_payroll_setting_view.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\"><img src='images/view.png' style='width:20px; height:20px;' title='View'></a>";
 								$actions .= "<img src='images/vertical.png' style='width:20px; height:20px;'>";
 								$actions .= "<a href=\"employee_payroll_setting_edit.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\"><img src='images/edit.png' style='width:20px; height:20px;' title='Edit'></a>";
@@ -169,7 +169,8 @@
 								$bpjsketenagakerjaan = $db->fetch_single_data("bpjs","bpjs_id",array("employee_id"=>$data_employee["id"],"bpjs_type" => '2',"pisa" => "peserta"));
 								$bpjsketenagakerjaan .= "<img src='images/folder.png' style='width:30px; height:30px; float:right;' title='Open Window' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/bpjs_ketenagakerjaan_list.php?employee_id=".$data_employee["id"]."&pisa=peserta\")'>";
 								if($data_employee["code"] == ""){
-									$data_employee["code"] = "<div id='employee_code_".$data_employee["id"]."'>".$f->input("btn_generate_code","Generate","type='button' onclick=\"generate_code('".$data_employee["id"]."','employee_code_".$data_employee["id"]."');\"")."</div>";
+									
+									$data_employee["code"] = $generate."<div id='employee_code_".$data_employee["id"]."'>".$f->input("btn_generate_code","Generate","type='button' onclick=\"generate_code('".$data_employee["id"]."','employee_code_".$data_employee["id"]."');\"","btn btn-info")."</div>";
 								} else {
 									$data_employee["code"] = "<a href=\"employee_payroll_setting_view.php?id=".$data_employee["id"]."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["code"]."</a>";
 								}
@@ -213,7 +214,7 @@
 <?php
 	include_once "footer.php";
 	include_once "a_pop_up_js.php";
-	include_once "a_pop_up_js.php";
+	include_once "ajax/employees_js.php";
 	include_once "window_boxs/wb_default.php";
 ?>
 </body>
