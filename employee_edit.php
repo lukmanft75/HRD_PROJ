@@ -11,6 +11,7 @@
 		$db->addtable("employees");				$db->where("id",$id);
 		$db->addfield("code");					$db->addvalue($code);
 		$db->addfield("name");					$db->addvalue($_POST["name"]);
+		$db->addfield("birthplace");			$db->addvalue($_POST["birthplace"]);
 		$db->addfield("birthdate");				$db->addvalue($_POST["birthdate"]);
 		$db->addfield("sex");					$db->addvalue($_POST["sex"]);
 		$db->addfield("status_id");				$db->addvalue($_POST["status_id"]);
@@ -105,15 +106,19 @@
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Birthplace</font>
+							<?=$f->input("birthplace",@$_DATA["birthplace"],"placeholder='' required","form-control");?>
+						</div>
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Birthdate</font>
 							<?=$f->input("birthdate",@$_DATA["birthdate"],"placeholder='' type='date' style='height:43px;'","form-control");?>
 						</div>
+					</div>
+					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Sex</font>
 							<?=$f->select("sex",[""=>"","M"=>"M","F"=>"F"],@$_DATA["sex"],"required","select_form");?>
 						</div>
-					</div>
-					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Marital Status</font>
 							<?=$f->select("status_id",$db->fetch_select_data("statuses","id","name",[],[],"",true),@$_DATA["status_id"],"required","select_form");?>						</div>
@@ -216,7 +221,7 @@
 					</div>
 					<div class="text-left click-subscribe">
 						<?=$f->input("save","Save","type='submit'","btn btn-primary");?>
-						<?=$f->input("back","Back","type='button' onclick=\"window.location='".str_replace("_add","_list",$_SERVER["PHP_SELF"])."';\"","btn btn-secondary");?>
+						<?=$f->input("back","Back","type='button' onclick=\"window.location='".str_replace("_edit","_list",$_SERVER["PHP_SELF"])."';\"","btn btn-secondary");?>
 					</div>
 					<?=$f->end();?>
 				</div>
@@ -289,13 +294,13 @@
 										foreach($_param["name"] as $key => $param_name){
 											$param 				= $db->fetch_all_data("employee_payroll_params",[],"employee_id = '".$id."' AND param LIKE '".$param_name."'","valid_at DESC,id DESC")[0];
 											$txt_param 			= $f->input("param[".$key."]",$param["param"],"type='hidden'");
-											$txt_valid_at 		= $txt_param.$f->input("valid_at[".$key."]",$param["valid_at"],"type='date'","form-control");
+											$txt_valid_at 		= $txt_param.$f->input("valid_at[".$key."]",format_tanggal($param["valid_at"],"Y-m-d"),"type='date'","form-control");
 											$txt_params_value 	= $f->input("params_value[".$key."]",$param["params_value"],"","form-control");
 											if($key == 1) 	$txt_params_value = $f->select("params_value[".$key."]",["TK"=>"TK","M0"=>"M0","M1"=>"M1","M2"=>"M2","M3"=>"M3"],$param["params_value"],"","select_form_tb");
 											if($key == 2) 	$txt_params_value = $f->select("params_value[".$key."]",["Yes"=>"Yes","No"=>"No"],$param["params_value"],"","select_form_tb");
 											if($key == 8) 	$txt_params_value = $f->select("params_value[".$key."]",["" => "", "Uji Coba"=>"Uji Coba","PKWT"=>"PKWT","Pegawai Tetap" => "Pegawai Tetap"],$param["params_value"],"","select_form_tb");
 											if($key == 9) 	$txt_params_value = $f->select("params_value[".$key."]",["" => "", "Local Desa"=>"Local Desa","Local Reguler"=>"Local Reguler","Nasional" => "Nasional"],$param["params_value"],"","select_form_tb");
-											if($key == 11) 	$txt_params_value = $f->input("params_value[".$key."]",$param["params_value"],"type='date'","form-control");
+											if($key == 11) 	$txt_params_value = $f->input("params_value[".$key."]",format_tanggal($param["params_value"],"Y-m-d"),"type='date'","form-control");
 											$view_history = "<img src=\"images/folder.png\" style='width:30px; height:30px;' title='Open Window' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/payroll_params_history_list.php?id=".$param["id"]."\")' >";
 											if($key == 9 || $key == 10 || $key == 11){
 												$view_history = "";
@@ -308,7 +313,7 @@
 								<?=$t->end();?>
 								<div style="padding: 5 0 5 0;">
 									<?=$f->input("save_parameters","Save","type='submit'","btn btn-primary");?>
-									<?=$f->input("back","Back","type='button' onclick=\"window.location='".str_replace("_add","_list",$_SERVER["PHP_SELF"])."';\"","btn btn-secondary");?>
+									<?=$f->input("back","Back","type='button' onclick=\"window.location='".str_replace("_edit","_list",$_SERVER["PHP_SELF"])."';\"","btn btn-secondary");?>
 								</div>
 							<?=$f->end();?>
 						</div>

@@ -11,11 +11,12 @@
 				$db->addfield("employee_id");		$db->addvalue($employee_id);
 				$db->addfield("relation_id");		$db->addvalue($_POST["relation_id"]);
 				$db->addfield("fullname");			$db->addvalue($_POST["fullname"]);
-				$db->addfield("ktp");				$db->addvalue($_POST["ktp"]);
 				$db->addfield("birthdate");			$db->addvalue($_POST["birthdate"]);
 				$db->addfield("degree_id");			$db->addvalue($_POST["degree_id"]);
 				$db->addfield("occupation");		$db->addvalue($_POST["occupation"]);
 				$db->addfield("phone");				$db->addvalue($_POST["phone"]);
+				$db->addfield("birthplace");		$db->addvalue($_POST["birthplace"]);
+				$db->addfield("sex");				$db->addvalue($_POST["sex"]);
 				$inserting = $db->update();
 				if($inserting["affected_rows"] > 0){
 					$_SESSION["alert_success"] = "Data saved successfully!";
@@ -51,18 +52,24 @@
 										<?=$f->input("fullname",@$employee_families["fullname"],"required","form-control");?>
 									</div>
 									<div class="col-md-6 col-sm-6 form-group contact-forms">
-										<font style="color:#1a75ff;font-style:italic;">NIK</font>
-										<?=$f->input("ktp",@$employee_families["ktp"],"type='number'","form-control");?>
+										<font style="color:#1a75ff;font-style:italic;">Degree</font>
+										<?=$f->select("degree_id",$db->fetch_select_data("degrees","id","name",[],[],"",true),@$employee_families["degree_id"],"","select_form");?>
 									</div>
 								</div>
 								<div class="row wls-contact-mid">
 									<div class="col-md-6 col-sm-6 form-group contact-forms">
-										<font style="color:#1a75ff;font-style:italic;">Birthdate</font>
-										<?=$f->input("birthdate",@$employee_families["birthdate"],"type='date'","form-control");?>
+										<font style="color:#1a75ff;font-style:italic;">Sex</font>
+										<?=$f->select("sex",[""=>"","M"=>"M","F"=>"F"],@$employee_families["sex"],"required","select_form");?>
+									</div>
+								</div>
+								<div class="row wls-contact-mid">
+									<div class="col-md-6 col-sm-6 form-group contact-forms">
+										<font style="color:#1a75ff;font-style:italic;">Birthplace</font>
+										<?=$f->input("birthplace",@$employee_families["birthplace"],"","form-control");?>
 									</div>
 									<div class="col-md-6 col-sm-6 form-group contact-forms">
-										<font style="color:#1a75ff;font-style:italic;">Degree</font>
-										<?=$f->select("degree_id",$db->fetch_select_data("degrees","id","name",[],[],"",true),@$employee_families["degree_id"],"","select_form");?>
+										<font style="color:#1a75ff;font-style:italic;">Birthdate</font>
+										<?=$f->input("birthdate",@$employee_families["birthdate"],"type='date'","form-control");?>
 									</div>
 								</div>
 								<div class="row wls-contact-mid">

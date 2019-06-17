@@ -8,6 +8,7 @@
 		$db->addtable("employees");
 		$db->addfield("code");				$db->addvalue($code);
 		$db->addfield("name");				$db->addvalue($_POST["name"]);
+		$db->addfield("birthplace");		$db->addvalue($_POST["birthplace"]);
 		$db->addfield("birthdate");			$db->addvalue($_POST["birthdate"]);
 		$db->addfield("sex");				$db->addvalue($_POST["sex"]);
 		$db->addfield("status_id");			$db->addvalue($_POST["status_id"]);
@@ -62,15 +63,19 @@
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Birthplace</font>
+							<?=$f->input("birthplace",@$_POST["birthplace"],"placeholder='' required","form-control");?>
+						</div>
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Birthdate</font>
 							<?=$f->input("birthdate",@$_POST["birthdate"],"placeholder='' type='date' style='height:43px;'","form-control");?>
 						</div>
+					</div>
+					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Sex</font>
 							<?=$f->select("sex",[""=>"","M"=>"M","F"=>"F"],@$_POST["sex"],"required","select_form");?>
 						</div>
-					</div>
-					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Marital Status</font>
 							<?=$f->select("status_id",$db->fetch_select_data("statuses","id","name",[],[],"",true),@$_POST["status_id"],"required","select_form");?>						</div>

@@ -36,12 +36,12 @@
 						<h5 class="text-center">Filter Box</h5>
 						<?=$f->start("filter","GET");?>
 							<div class="form-group ">
+								<p class="mb-2">Code</p>
+								<?=$f->input("code",@$_GET["code"],"","form-control");?>
+							</div>
+							<div class="form-group ">
 								<p class="mb-2">Name</p>
 								<?=$f->input("name",@$_GET["name"],"","form-control");?>
-							</div>
-							<div class="form-group">
-								<p class="mb-2">Year of Brithdate</p>
-								<?=$f->input("year",@$_GET["year"],"type='number'","form-control");?>
 							</div>
 							<div class="form-group">
 								<p class="mb-2">Sex</p>
@@ -52,8 +52,24 @@
 								<?=$f->select("status_id",$db->fetch_select_data("statuses","id","name",[],[],"",true),@$_GET["status_id"],"","select_filter");?>
 							</div>
 							<div class="form-group">
-								<p class="mb-2">Address</p>
-								<?=$f->input("address",@$_GET["address"],"","form-control");?>
+								<p class="mb-2">As CSR</p>
+								<?=$f->select("employed_as_csr",[""=>"","1"=>"No","2"=>"Yes"],@$_GET["employed_as_csr"],"","select_filter");?>
+							</div>
+							<div class="form-group">
+								<p class="mb-2">Training</p>
+								<?=$f->input("training",@$_GET["training"],"","form-control");?>
+							</div>
+							<div class="form-group">
+								<p class="mb-2">Position</p>
+								<?=$f->input("position",@$_GET["position"],"","form-control");?>
+							</div>
+							<div class="form-group">
+								<p class="mb-2">Contract Status</p>
+								<?=$f->select("contract_status",["" => "", "Uji Coba"=>"Uji Coba","PKWT"=>"PKWT","Pegawai Tetap" => "Pegawai Tetap"],@$_GET["contract_status"],"","select_filter");?>
+							</div>
+							<div class="form-group">
+								<p class="mb-2">Recruitment Status</p>
+								<?=$f->select("status_recruitment",["" => "", "Local Desa"=>"Local Desa","Local Reguler"=>"Local Reguler","Nasional" => "Nasional"],@$_GET["status_recruitment"],"","select_filter");?>
 							</div>
 							<?=$f->input("page","1","type='hidden'");?>
 							<?=$f->input("sort",@$_GET["sort"],"type='hidden'");?>
@@ -82,16 +98,22 @@
 			<?php
 				$whereclause = "";
 				if(@$__group_id > 0)	$whereclause .= "hidden = '0' AND ";
-				// if(@$_GET["name"]!="") $whereclause .= "name LIKE '"."%".str_replace(" ","%",$_GET["name"])."%"."' AND ";
-				// if(@$_GET["year"]!="") $whereclause .= "birthdate LIKE '".str_replace(" ","%",$_GET["year"])."-%"."' AND ";
-				// if(@$_GET["sex"]!="") $whereclause .= "sex = '".$_GET["sex"]."' AND ";
-				// if(@$_GET["status_id"]!="") $whereclause .= "status_id = '".$_GET["sex"]."' AND ";
-				// if(@$_GET["address"]!="") $whereclause .= "(address LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR 
-															// address_2 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR
-															// address_3 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."' OR
-															// address_4 LIKE '"."%".str_replace(" ","%",$_GET["address"])."%"."'
-															// ) AND ";
+				if(@$_GET["code"]!="") $whereclause .= "(code LIKE'%".$_GET["code"]."%') AND ";
+				if(@$_GET["name"]!="") $whereclause .= "(name LIKE '%".$_GET["name"]."%') AND ";
+				if(@$_GET["sex"]!="") $whereclause .= "(sex ='".$_GET["sex"]."') AND ";
+				if(@$_GET["status_id"]!="") $whereclause .= "(status_id ='".$_GET["status_id"]."') AND ";
 
+				if(@$_GET["employed_as_csr"] > 0) $whereclause .= "(employed_as_csr = '".$_GET["employed_as_csr"]."') AND ";
+				if(@$_GET["training"]!= "" || @$_GET["position"]!= ""){
+					$whereclause .= "(";
+					if(@$_GET["training"]!= "") $whereclause .= "id IN (SELECT employee_id FROM employee_trainings WHERE name LIKE '%".$_GET["training"]."%' group by employee_id) OR ";
+					if(@$_GET["position"]!= "") $whereclause .= "id IN (SELECT employee_id FROM employee_payroll_params WHERE param = 'Position' AND params_value LIKE '%".$_GET["position"]."%' group by employee_id) OR ";
+					$whereclause = substr($whereclause,0,-3);
+					$whereclause .= ") AND ";
+				}
+				if(@$_GET["contract_status"] != "") $whereclause .= "id IN (SELECT employee_id FROM employee_payroll_params WHERE param = 'Contract Status' AND valid_at <= '".date("Y-m-d")."' AND params_value = '".$_GET["contract_status"]."' group by employee_id) AND ";
+				if(@$_GET["status_recruitment"] != "") $whereclause .= "id IN (SELECT employee_id FROM employee_payroll_params WHERE param = 'Recruitment Status' AND valid_at <= '".date("Y-m-d")."' AND params_value = '".$_GET["status_recruitment"]."' group by employee_id) AND ";
+   	
 				$db->addtable("employees");
 				if($whereclause != "") $db->awhere(substr($whereclause,0,-4));$db->limit($_max_counting);
 				$maxrow = count($db->fetch_data(true));

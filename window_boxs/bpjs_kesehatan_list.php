@@ -4,7 +4,7 @@
 		$db->addtable("bpjs");
 		if($_GET["employee_id"] > 0) {
 			$employee_id	= $_GET["employee_id"];
-			$db->awhere("candidate_id = '".$candidate_id."' AND bpjs_type = '1'");
+			$db->awhere("employee_id = '".$employee_id."' AND bpjs_type = '1'");
 		}
 		if($_GET["candidate_id"] > 0) {
 			$candidate_id 	= $_GET["candidate_id"];
@@ -81,6 +81,7 @@
 				</div>
 			</div>
 				<?=$f->input("add","Add","type='button' onclick=\"window.location='".str_replace("_list","_add",$_SERVER["PHP_SELF"])."?candidate_id=".$candidate_id."&employee_id=".$employee_id."';\"","btn btn-info");?>
+				<?=$f->input("close","Close","type='button' onclick=\"parent.window.location = parent.window.location;\"","btn btn-secondary");?>
 		</div>
 	</div>
 </body>			
