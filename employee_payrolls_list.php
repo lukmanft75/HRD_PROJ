@@ -1,28 +1,42 @@
 <?php
-	$_isexport = false;
-	if(@$_GET["export"]){
-		$_exportname = "Candidate_List.xls";
+	if($_GET["export"] || $_GET["export_bank"]){
+		$_exportname = "EmployePayrollsBanks.xls";
 		header("Content-type: application/x-msdownload");
 		header("Content-Disposition: attachment; filename=".$_exportname);
 		header("Pragma: no-cache");
 		header("Expires: 0");
 		$_GET["do_filter"]="Load";
 		$_isexport = true;
+		$_export_bank = true;
 	}
 	include_once "head.php";
-	if(GET_url_decode("deleting") > 1 && $__group_id == "0"){
-		$db->addtable("candidates");			$db->where("id",GET_url_decode("deleting"));
-		$db->addfield("hidden");		$db->addvalue("1");
-		$update = $db->update();
-		$_SESSION["alert_success"] = "Data deleted successfully!";
-		?>
-			<script type="text/JavaScript">setTimeout("location.href = 'candidate_list.php';",1500);</script>
-		<?php
+
+	if(isset($_GET["deleting"])){
+		$db->addtable("employee_payrolls");
+		$db->where("employee_id",$_GET["deleting"]);
+		$db->where("periode",$_GET["periode"]);
+		$db->delete_();
+		?><script> window.location="employee_payrolls_list.php?periode=<?=substr($_GET["periode"],0,7);?>&project=<?=$_GET["project"];?>&do_filter=Load";</script><?php
+		exit();	
 	}
+	if($_GET["do_filter"]){
+		$_SESSION["GET"]["employee_payrolls_list"] = $_GET;
+	} else {
+		if($_GET["reset_filter"]){
+			$_SESSION["GET"]["employee_payrolls_list"] = "";
+		} else {
+			if(is_array($_SESSION["GET"]["employee_payrolls_list"])){
+				$_GET = $_SESSION["GET"]["employee_payrolls_list"];
+			}
+		}
+	}
+	if(!$_GET["periode"]) $_GET["periode"] = $db->fetch_single_data("employee_payrolls","periode",[],["periode DESC"]);
+	if(!$_GET["periode"]) $_GET["periode"] = date("Y-m");
+	$_GET["periode"] = substr($_GET["periode"],0,7)."-01";
 	
 	if(!$_isexport){
 	?>
-	<!--Filter-->
+	<!--Filter--
 	<div class="modal fade" id="filter_box" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
@@ -76,7 +90,7 @@
 			<div class="sub-head mb-3 ">
 			<?php include_once "a_notification.php"; ?>
 				<h4>Employee Payrolls</h4>
-					<?=$f->input("add","Add","type='button' onclick=\"window.location='candidate_add.php';\"", "btn btn-primary");?>
+					<?=$f->input("add","Add","type='button' onclick=\"window.location='employee_payrolls_add.php';\"", "btn btn-primary");?>
 					<?=$f->input("filter","Filter","type='button' data-toggle='modal' data-target='#filter_box'", "btn btn-success");?>
 			</div>
 			
@@ -84,9 +98,10 @@
 				$whereclause = "";
 				if(@$_GET["code"]!="") $whereclause .= "(employee_id IN (SELECT id FROM employees WHERE code LIKE'%".$_GET["code"]."%')) AND ";
 				if(@$_GET["name"]!="") $whereclause .= "(employee_id IN (SELECT id FROM employees WHERE name LIKE '%".$_GET["name"]."%')) AND ";
-				if(@$_GET["periode"]!="") $whereclause .= "(periode ='".$_GET["periode"]."') AND ";
+				if(@$_GET["periode"]!="") $whereclause .= "(periode LIKE '".$_GET["periode"]."%') AND ";
 				if(@$_GET["project"]!="") $whereclause .= "(employee_id IN (SELECT employee_id FROM employee_payroll_params WHERE param LIKE 'Project' AND params_value = '".$_GET["project"]."')) AND ";
-
+				$whereclause .=(substr($whereclause,0,-4))." GROUP BY employee_id AND ";
+				
 				$db->addtable("employee_payrolls");
 				if($whereclause != "") $db->awhere(substr($whereclause,0,-4));$db->limit($_max_counting);
 				$maxrow = count($db->fetch_data(true));
@@ -105,7 +120,7 @@
 			
 			
 			<?php  
-			if($_GET["periode"]!="" && $_GET["project"]!=""){
+			if($_GET["periode"]!=""){
 				if(!$_isexport){ include "a_pagination.php"; }?>
 					<div class="bd-example mb-4">
 						<div style="overflow-x:auto; position: relative; height: 60%; overflow: auto; display: block;">
@@ -113,7 +128,7 @@
 								<?php 
 								$arr_header = [];
 								array_push($arr_header,"No");
-								if(!$_isexport) array_push($arr_header,"");
+								if(!$_isexport) array_push($arr_header,"Actions");
 								array_push($arr_header,"Code");
 								array_push($arr_header,"Name");
 								if(!$_export_bank) array_push($arr_header,"Fixed Income");
@@ -128,9 +143,9 @@
 								echo $t->header($arr_header);
 
 								foreach($employee_payrolls as $no => $employee_payroll){
-									$actions = "<a href=\"employee_payrolls_add.php?regenerate=1&employee_id=".$employee_payroll["employee_id"]."&periode=".$employee_payroll["periode"]."\">ReGenerate</a> | 
-												<a href='#' onclick=\"if(confirm('Are You sure want to delete this employee payroll?')){window.location='?deleting=".$employee_payroll["employee_id"]."&periode=".$employee_payroll["periode"]."&project=".$_GET["project"]."';}\">Delete</a> | 
-												<a target='_BLANK' href=\"employee_payrolls_view.php?employee_id=".$employee_payroll["employee_id"]."&periode=".$employee_payroll["periode"]."\">View</a>";
+									$actions = "<a href=\"employee_payrolls_add.php?regenerate=1&employee_id=".$employee_payroll["employee_id"]."&periode=".$employee_payroll["periode"]."\" style='color:#013fa5; font-weight:bolder; font-style:italic;'>ReGenerate</a> | 
+												<a href='#' onclick=\"if(confirm('Are You sure want to delete this employee payroll?')){window.location='?deleting=".$employee_payroll["employee_id"]."&periode=".$employee_payroll["periode"]."&project=".$_GET["project"]."';}\" style='color:#013fa5; font-weight:bolder; font-style:italic;'>Delete</a> | 
+												<a target='_BLANK' href=\"employee_payrolls_view.php?employee_id=".$employee_payroll["employee_id"]."&periode=".$employee_payroll["periode"]."\" style='color:#013fa5; font-weight:bolder; font-style:italic;'>View</a>";
 									$employee = $db->fetch_all_data("employees",[],"id = '".$employee_payroll["employee_id"]."'")[0];
 									$fixed = $db->fetch_single_data("employee_payrolls","concat(sum(amount))",["employee_id" => $employee_payroll["employee_id"],"periode" => $_GET["periode"],"payroll_type_id" => "1"]);
 									$variable = $db->fetch_single_data("employee_payrolls","concat(sum(amount))",["employee_id" => $employee_payroll["employee_id"],"periode" => $_GET["periode"],"payroll_type_id" => "2"]);
@@ -141,7 +156,7 @@
 									$thp = $fixed + $variable - $deduction;
 									$arr_row = [];
 									$arr_row_attr = [];
-									array_push($arr_row,$no+$start+1);
+									array_push($arr_row,$start++);
 									if(!$_isexport) array_push($arr_row,$actions);
 									array_push($arr_row,$employee["code"]);
 									array_push($arr_row,$employee["name"]);

@@ -368,8 +368,8 @@
 									$_param["value"][3] = "Transfer";
 									$_param["name"][4] = "Bank Name";
 									$_param["value"][4] = $_DATA["bank_name"];
-									$_param["name"][5] = "Bank Account";
-									$_param["value"][5] = $_DATA["bank_account"];
+									$_param["name"][99] = "Bank Account";
+									$_param["value"][99] = $_DATA["bank_account"];
 									$_param["name"][5] = "Bank Holder Name";
 									$_param["value"][5] = $_DATA["bank_holder_name"];
 									$_param["name"][6] = "Work Location";
