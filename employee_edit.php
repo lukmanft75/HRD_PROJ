@@ -20,9 +20,6 @@
 		$db->addfield("address_3");				$db->addvalue($_POST["address_3"]);
 		$db->addfield("phone");					$db->addvalue($_POST["phone"]);
 		$db->addfield("phone_2");				$db->addvalue($_POST["phone_2"]);
-		$db->addfield("bank_name");				$db->addvalue($_POST["bank_name"]);
-		$db->addfield("bank_account");			$db->addvalue($_POST["bank_account"]);
-		$db->addfield("bank_holder_name");		$db->addvalue($_POST["bank_holder_name"]);
 		$db->addfield("ktp");					$db->addvalue($_POST["ktp"]);
 		$db->addfield("npwp");					$db->addvalue($_POST["npwp"]);
 		$db->addfield("email");					$db->addvalue($_POST["email"]);
@@ -65,7 +62,16 @@
 			} else {
 				$inserting = $db->insert();
 			}
+			
+			
 		}
+		
+		$db->addtable("employees");				$db->where("id",$id);
+		$db->addfield("bank_name");				$db->addvalue($_POST["params_value"][4]);
+		$db->addfield("bank_account");			$db->addvalue($_POST["params_value"][5]);
+		$db->addfield("bank_holder_name");		$db->addvalue($_POST["params_value"][6]);
+		$updating = $db->update();
+
 		$_SESSION["alert_success"] = "Params updated successfully!";
 	}
 ?>
@@ -147,6 +153,7 @@
 							<?=$f->input("phone_2",@$_DATA["phone_2"],"placeholder=''","form-control");?>
 						</div>
 					</div>
+					<!--
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Bank Name</font>
@@ -157,11 +164,14 @@
 							<?=$f->input("bank_account",@$_DATA["bank_account"],"placeholder='' type='number'","form-control");?>
 						</div>
 					</div>
+					-->
 					<div class="row wls-contact-mid">
+						<!--
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Bank Holder Name</font>
 							<?=$f->input("bank_holder_name",@$_DATA["bank_holder_name"],"placeholder=''","form-control");?>
 						</div>
+						-->
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">NIK</font>
 							<?=$f->input("ktp",@$_DATA["ktp"],"placeholder='' type='number' required","form-control");?>
@@ -251,20 +261,20 @@
 									$_param["value"][4] = $_DATA["bank_name"];
 									$_param["name"][5] = "Bank Account";
 									$_param["value"][5] = $_DATA["bank_account"];
-									$_param["name"][5] = "Bank Holder Name";
-									$_param["value"][5] = $_DATA["bank_holder_name"];
-									$_param["name"][6] = "Work Location";
-									$_param["value"][6] = "";
-									$_param["name"][7] = "Position";
+									$_param["name"][6] = "Bank Holder Name";
+									$_param["value"][6] = $_DATA["bank_holder_name"];
+									$_param["name"][7] = "Work Location";
 									$_param["value"][7] = "";
-									$_param["name"][8] = "Contract Status";
+									$_param["name"][8] = "Position";
 									$_param["value"][8] = "";
-									$_param["name"][9] = "Recruitment Status";
+									$_param["name"][9] = "Contract Status";
 									$_param["value"][9] = "";
-									$_param["name"][10] = "Point Of Hire";
+									$_param["name"][10] = "Recruitment Status";
 									$_param["value"][10] = "";
-									$_param["name"][11] = "Resign/Termination Date";
+									$_param["name"][11] = "Point Of Hire";
 									$_param["value"][11] = "";
+									$_param["name"][12] = "Resign/Termination Date";
+									$_param["value"][12] = "";
 									foreach($_param["name"] as $key => $param_name){
 										if($db->fetch_single_data("employee_payroll_params","id",["employee_id" => $id,"param" => $param_name]) <= 0){
 											$db->addtable("employee_payroll_params");
@@ -298,11 +308,11 @@
 											$txt_params_value 	= $f->input("params_value[".$key."]",$param["params_value"],"","form-control");
 											if($key == 1) 	$txt_params_value = $f->select("params_value[".$key."]",["TK"=>"TK","M0"=>"M0","M1"=>"M1","M2"=>"M2","M3"=>"M3"],$param["params_value"],"","select_form_tb");
 											if($key == 2) 	$txt_params_value = $f->select("params_value[".$key."]",["Yes"=>"Yes","No"=>"No"],$param["params_value"],"","select_form_tb");
-											if($key == 8) 	$txt_params_value = $f->select("params_value[".$key."]",["" => "", "Uji Coba"=>"Uji Coba","PKWT"=>"PKWT","Pegawai Tetap" => "Pegawai Tetap"],$param["params_value"],"","select_form_tb");
-											if($key == 9) 	$txt_params_value = $f->select("params_value[".$key."]",["" => "", "Local Desa"=>"Local Desa","Local Reguler"=>"Local Reguler","Nasional" => "Nasional"],$param["params_value"],"","select_form_tb");
-											if($key == 11) 	$txt_params_value = $f->input("params_value[".$key."]",format_tanggal($param["params_value"],"Y-m-d"),"type='date'","form-control");
+											if($key == 9) 	$txt_params_value = $f->select("params_value[".$key."]",["" => "", "Uji Coba"=>"Uji Coba","PKWT"=>"PKWT","Pegawai Tetap" => "Pegawai Tetap"],$param["params_value"],"","select_form_tb");
+											if($key == 10) 	$txt_params_value = $f->select("params_value[".$key."]",["" => "", "Local Desa"=>"Local Desa","Local Reguler"=>"Local Reguler","Nasional" => "Nasional"],$param["params_value"],"","select_form_tb");
+											if($key == 12) 	$txt_params_value = $f->input("params_value[".$key."]",format_tanggal($param["params_value"],"Y-m-d"),"type='date'","form-control");
 											$view_history = "<img src=\"images/folder.png\" style='width:30px; height:30px;' title='Open Window' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/payroll_params_history_list.php?id=".$param["id"]."\")' >";
-											if($key == 9 || $key == 10 || $key == 11){
+											if($key == 10 || $key == 11 || $key == 12){
 												$view_history = "";
 												$txt_valid_at = $txt_param.$f->input("valid_at[".$key."]",$param["valid_at"],"type='hidden''");
 											}

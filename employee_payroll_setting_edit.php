@@ -20,9 +20,9 @@
 		$db->addfield("address_3");				$db->addvalue($_POST["address_3"]);
 		$db->addfield("phone");					$db->addvalue($_POST["phone"]);
 		$db->addfield("phone_2");				$db->addvalue($_POST["phone_2"]);
-		$db->addfield("bank_name");				$db->addvalue($_POST["bank_name"]);
-		$db->addfield("bank_account");			$db->addvalue($_POST["bank_account"]);
-		$db->addfield("bank_holder_name");		$db->addvalue($_POST["bank_holder_name"]);
+		// $db->addfield("bank_name");				$db->addvalue($_POST["bank_name"]);
+		// $db->addfield("bank_account");			$db->addvalue($_POST["bank_account"]);
+		// $db->addfield("bank_holder_name");		$db->addvalue($_POST["bank_holder_name"]);
 		$db->addfield("ktp");					$db->addvalue($_POST["ktp"]);
 		$db->addfield("npwp");					$db->addvalue($_POST["npwp"]);
 		$db->addfield("email");					$db->addvalue($_POST["email"]);
@@ -66,6 +66,13 @@
 				$inserting = $db->insert();
 			}
 		}
+		
+		$db->addtable("employees");				$db->where("id",$id);
+		$db->addfield("bank_name");				$db->addvalue($_POST["params_value"][4]);
+		$db->addfield("bank_account");			$db->addvalue($_POST["params_value"][5]);
+		$db->addfield("bank_holder_name");		$db->addvalue($_POST["params_value"][6]);
+		$updating = $db->update();
+		
 		$_SESSION["alert_success"] = "Params updated successfully!";
 	}
 	
@@ -266,6 +273,7 @@
 							<?=$f->input("phone_2",@$_DATA["phone_2"],"placeholder=''","form-control");?>
 						</div>
 					</div>
+					<!--
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Bank Name</font>
@@ -276,11 +284,14 @@
 							<?=$f->input("bank_account",@$_DATA["bank_account"],"placeholder='' type='number'","form-control");?>
 						</div>
 					</div>
+					-->
 					<div class="row wls-contact-mid">
+						<!--
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Bank Holder Name</font>
 							<?=$f->input("bank_holder_name",@$_DATA["bank_holder_name"],"placeholder=''","form-control");?>
 						</div>
+						-->
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">NIK</font>
 							<?=$f->input("ktp",@$_DATA["ktp"],"placeholder='' type='number' required","form-control");?>
@@ -444,6 +455,7 @@
 				<div id="employee_others" style="display:none;">
 					<div style="overflow-x:auto;">
 						<div class="table_list" style="margin: 0 !important;">
+								<!--
 								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Default Fixed Income Setting</u></font>
 								<?php
 								echo $f->start();
@@ -471,16 +483,20 @@
 							
 								<hr>
 								<br>
-								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Additional Fixed Income Setting</u></font>
+								-->
+								
+								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Fixed Income Setting</u></font>
 								<?php
 									echo $t->start("","editor_content");
 										echo $t->header(["No.","Item","Tanggal Berlaku","%","Nominal","Taxable","Exc. THP","","History"],["nowrap style='font-weight:bold;font-size:14px;text-align:center;'"]);
-										$fixeds = $db->fetch_all_data("employee_payroll_setting",[],"employee_id = '".$id."' AND payroll_type_id='1' AND payroll_item_id = 0 GROUP BY name","id");
+										// $fixeds = $db->fetch_all_data("employee_payroll_setting",[],"employee_id = '".$id."' AND payroll_type_id='1' AND payroll_item_id = 0 GROUP BY name","id");
+										$fixeds = $db->fetch_all_data("employee_payroll_setting",[],"employee_id = '".$id."' AND payroll_type_id='1' GROUP BY name","id");
 										$no = 0;
 										foreach($fixeds as $key => $_fixed){
 											$no = $key+1;
 											$fixed				 	= $db->fetch_all_data("employee_payroll_setting",[],"employee_id = '".$id."' AND payroll_type_id='1' AND name LIKE '".$_fixed["name"]."'","valid_at DESC,id DESC")[0];
 											$txt_payroll_item_id 	= $f->input("employee_payroll_setting_id",$fixed["id"],"type='hidden'");
+											$txt_payroll_item_id 	.= $f->select("payroll_item_id",$db->fetch_select_data("payroll_items","id","name",["payroll_type_id" => "1"],[],"",true),$fixed["payroll_item_id"],"","select_form_tb");
 											$txt_payroll_item_id 	.= $f->input("payroll_item_name",$fixed["name"],"","form-control");
 											$txt_valid_at 			= $f->input("valid_at",$fixed["valid_at"],"type='date'","form-control");
 											$txt_percentage 		= $f->input("percentage",$fixed["percentage"],"type='number' step='0.01' style='text-align:right;'","form-control");
@@ -495,7 +511,9 @@
 											echo $t->row([$f->start().$no,$txt_payroll_item_id,$txt_valid_at,$txt_percentage,$txt_nominal,$chk_taxable,$chk_excluding_thp,$btn_save.$f->end(),$view_history]);
 										}
 										$no++;
-										$txt_payroll_item_id 		= $f->input("payroll_item_name","","","form-control");
+										$txt_payroll_item_id 		= $f->input("employee_payroll_setting_id","","type='hidden'");
+										$txt_payroll_item_id 		.= $f->select("payroll_item_id",$db->fetch_select_data("payroll_items","id","name",["payroll_type_id" => "1"],[],"",true),"","","select_form_tb");
+										$txt_payroll_item_id 		.= "<br>".$f->input("payroll_item_name","","","form-control");
 										$txt_valid_at 				= $f->input("valid_at",date("Y-m-d"),"type='date'","form-control");
 										$txt_percentage 			= $f->input("percentage","","type='number' step='0.01' style='text-align:right;'","form-control");
 										$txt_nominal 				= $f->input("nominal","","type='number' step='0.01' style='text-align:right;'","form-control");
@@ -509,7 +527,7 @@
 							
 								<hr>
 								<br>
-								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Variable Income</u></font>
+								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Variable Income Setting</u></font>
 								<?php
 									echo $t->start("","editor_content");
 										echo $t->header(["No.","Item","Tanggal Berlaku","%","Nominal","Taxable","Exc. Thp","","History"],["nowrap style='font-weight:bold;font-size:14px;text-align:center;'"]);
