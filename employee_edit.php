@@ -31,6 +31,11 @@
 		$db->addfield("emergency_no2");			$db->addvalue($_POST["emergency_no2"]);
 		$db->addfield("emergency_name2");		$db->addvalue($_POST["emergency_name2"]);
 		$db->addfield("emergency_relation2");	$db->addvalue($_POST["emergency_relation2"]);
+		$db->addfield("nickname");				$db->addvalue($_POST["nickname"]);
+		$db->addfield("own");					$db->addvalue($_POST["own"]);
+		$db->addfield("religion");				$db->addvalue($_POST["religion"]);
+		$db->addfield("nationality");			$db->addvalue($_POST["nationality"]);
+		$db->addfield("no_kk");					$db->addvalue($_POST["no_kk"]);
 		$updating = $db->update();
 		if($updating["affected_rows"] >= 0){
 			$_SESSION["alert_success"] = "Data updated successfully!";
@@ -106,15 +111,21 @@
 							<font style="color:#1a75ff;font-style:italic;">Code</font>
 							<?=$f->input("code_employee",@$_DATA["code"],"placeholder='Please Generate Here!' onclick='generate_code();' readonly","form-control");?>
 						</div>
+					</div>
+					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Name</font>
 							<?=$f->input("name",@$_DATA["name"],"placeholder='' required","form-control");?>
+						</div>
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Nickname</font>
+							<?=$f->input("nickname",@$_DATA["nickname"],"placeholder=''","form-control");?>
 						</div>
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Birthplace</font>
-							<?=$f->input("birthplace",@$_DATA["birthplace"],"placeholder=''","form-control");?>
+							<?=$f->input("birthplace",@$_DATA["birthplace"],"placeholder='' required","form-control");?>
 						</div>
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Birthdate</font>
@@ -146,6 +157,22 @@
 					</div>
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Owner of the address</font>
+							<?=$f->select("address_owner",["own" => "Own","parent_family" => "Parent/Familiy","rent_lease" => "Rent/Lease"],@$_DATA["address_owner"],"","select_form");?>
+						</div>
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Nationality</font>
+							<?=$f->input("nationality",@$_DATA["nationality"],"placeholder=''","form-control");?>
+						</div>
+					</div>
+					<div class="row wls-contact-mid">
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
+							<font style="color:#1a75ff;font-style:italic;">Religion</font>
+							<?=$f->input("religion",@$_DATA["religion"],"placeholder=''","form-control");?>
+						</div>
+					</div>
+					<div class="row wls-contact-mid">
+						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">Handphone</font>
 							<?=$f->input("phone",@$_DATA["phone"],"placeholder='' type='number'","form-control");?>
 						</div>
@@ -154,25 +181,11 @@
 							<?=$f->input("phone_2",@$_DATA["phone_2"],"placeholder=''","form-control");?>
 						</div>
 					</div>
-					<!--
 					<div class="row wls-contact-mid">
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
-							<font style="color:#1a75ff;font-style:italic;">Bank Name</font>
-							<?=$f->input("bank_name",@$_DATA["bank_name"],"placeholder=''","form-control");?>
+							<font style="color:#1a75ff;font-style:italic;">Family Card Number</font>
+							<?=$f->input("no_kk",@$_DATA["no_kk"],"placeholder='' type='number'","form-control");?>
 						</div>
-						<div class="col-md-6 col-sm-6 form-group contact-forms">
-							<font style="color:#1a75ff;font-style:italic;">Bank Account</font>
-							<?=$f->input("bank_account",@$_DATA["bank_account"],"placeholder='' type='number'","form-control");?>
-						</div>
-					</div>
-					-->
-					<div class="row wls-contact-mid">
-						<!--
-						<div class="col-md-6 col-sm-6 form-group contact-forms">
-							<font style="color:#1a75ff;font-style:italic;">Bank Holder Name</font>
-							<?=$f->input("bank_holder_name",@$_DATA["bank_holder_name"],"placeholder=''","form-control");?>
-						</div>
-						-->
 						<div class="col-md-6 col-sm-6 form-group contact-forms">
 							<font style="color:#1a75ff;font-style:italic;">NIK</font>
 							<?=$f->input("ktp",@$_DATA["ktp"],"placeholder='' type='number' required","form-control");?>
