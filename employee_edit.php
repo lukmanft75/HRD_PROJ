@@ -238,7 +238,7 @@
 									$ResignDate = $db->fetch_single_data("employee_payroll_params","params_value",["employee_id" => $id, "param" => "Resign Date:LIKE", "valid_at" => date("Y")."%:LIKE"],["valid_at DESC, id DESC"]);
 									if(substr($ResignDate,0,4) == date("Y")) $bulanend = substr($ResignDate,5,2) * 1;
 									else $bulanend = 12;
-
+						
 									$_param["name"][0] = "Bulan join dari,sampai";
 									$_param["value"][0] = $bulanjoin.",".$bulanend;
 									$_param["name"][1] = "Status";

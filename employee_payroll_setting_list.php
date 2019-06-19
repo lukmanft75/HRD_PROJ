@@ -172,16 +172,16 @@
 									
 									$data_employee["code"] = $generate."<div id='employee_code_".$data_employee["id"]."'>".$f->input("btn_generate_code","Generate","type='button' onclick=\"generate_code('".$data_employee["id"]."','employee_code_".$data_employee["id"]."');\"","btn btn-info")."</div>";
 								} else {
-									$data_employee["code"] = "<a href=\"employee_payroll_setting_view.php?id=".$data_employee["id"]."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["code"]."</a>";
+									$data_employee["code"] = "<a href=\"employee_payroll_setting_view.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["code"]."</a>";
 								}
 								if($data_employee["employed_as_csr"] == "2") {$csr = "Yes";} else {$csr = "";}
 								?>
 								<?=$t->row(
 											array($start++,
 												$actions,
-												"<a href=\"employee_payroll_setting_view.php?id=".$data_employee["id"]."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["id"]."</a>",
+												"<a href=\"employee_payroll_setting_view.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["id"]."</a>",
 												$data_employee["code"],
-												"<a href=\"employee_payroll_setting_view.php?id=".$data_employee["id"]."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["name"]."</a>",
+												"<a href=\"employee_payroll_setting_view.php?".url_encode("employee_id")."=".url_encode($data_employee["id"])."\" style='color:black; font-weight:bolder; font-style:italic;'>".$data_employee["name"]."</a>",
 												format_tanggal($data_employee["birthdate"],"d-M-Y"),
 												$data_employee["sex"],
 												$status,
