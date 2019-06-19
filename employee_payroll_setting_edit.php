@@ -37,10 +37,44 @@
 		$updating = $db->update();
 		if($updating["affected_rows"] >= 0){
 			$_SESSION["alert_success"] = "Data updated successfully!";
-			 ?><script type="text/JavaScript">setTimeout("location.href = '<?=$__base_url;?>';",1500);</script><?php
+			 ?><script type="text/JavaScript">setTimeout("employee_details();",1500);</script><?php
 		} else {
 			$_SESSION["alert_danger"] = "Failed to saved!";
 		}
+	}
+
+	if(isset($_POST["save_default_fixed_income"])){
+		foreach($_POST["payroll_item_name"] as $employee_payroll_setting_id => $payroll_item_name){
+			$valid_at = $db->fetch_single_data("employee_payroll_setting","valid_at",["id" => $employee_payroll_setting_id]);
+			$payroll_type_id = $db->fetch_single_data("employee_payroll_setting","payroll_type_id",["id" => $employee_payroll_setting_id]);
+			$payroll_item_id = $db->fetch_single_data("employee_payroll_setting","payroll_item_id",["id" => $employee_payroll_setting_id]);
+
+			if($valid_at == $_POST["valid_at"][$employee_payroll_setting_id]) $is_editing = true;
+			else $is_editing = false;
+
+			$db->addtable("employee_payroll_setting");	
+			if($is_editing){
+				$db->where("id",$employee_payroll_setting_id);
+			} else {
+				$db->addfield("employee_id");		$db->addvalue($id);
+				$db->addfield("payroll_type_id");	$db->addvalue($payroll_type_id);
+				$db->addfield("payroll_item_id");	$db->addvalue($payroll_item_id);
+				$db->addfield("valid_at");			$db->addvalue($_POST["valid_at"][$employee_payroll_setting_id]);
+			}
+			$db->addfield("name");				$db->addvalue($payroll_item_name);
+			$db->addfield("percentage");		$db->addvalue($_POST["percentage"][$employee_payroll_setting_id]);
+			$db->addfield("nominal");			$db->addvalue($_POST["nominal"][$employee_payroll_setting_id]);
+			$db->addfield("taxable");			$db->addvalue($_POST["taxable"][$employee_payroll_setting_id]);
+			$db->addfield("excluding_thp");		$db->addvalue($_POST["excluding_thp"][$employee_payroll_setting_id]);
+			if($is_editing){
+				$inserting = $db->update();
+			} else {
+				$inserting = $db->insert();
+			}
+		}
+		
+		$_SESSION["alert_success"] = "Payrolls updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_others();",1500);</script><?php
 	}
 	
 	if(isset($_POST["save_parameters"])){
@@ -74,12 +108,31 @@
 		$updating = $db->update();
 		
 		$_SESSION["alert_success"] = "Params updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_params();",1500);</script><?php
+		
 	}
 	
 	if(isset($_POST["save_fixed"])){
+		
+	    if($_POST["payroll_item_id"] > 0) $payroll_item_name = $db->fetch_single_data("payroll_items","name",["id" => $_POST["payroll_item_id"]]);
+	    if($payroll_item_name != "") $_POST["payroll_item_name"] = $payroll_item_name;
+	    if(!$_POST["payroll_item_id"] && $_POST["payroll_item_name"]){//new payroll_items
+	    	$payroll_item_id = $db->fetch_single_data("payroll_items","id",["name" => $_POST["payroll_item_name"].":LIKE"]);
+	    	if($payroll_item_id <= 0){
+				$db->addtable("payroll_items");	
+				$db->addfield("payroll_type_id");	$db->addvalue(1);
+				$db->addfield("name");				$db->addvalue($_POST["payroll_item_name"]);
+				$inserting = $db->insert();
+				$_POST["payroll_item_id"] = $inserting["insert_id"];
+			} else {
+				$_POST["payroll_item_id"] = $payroll_item_id;
+			}
+	    }
+		
 		$db->addtable("employee_payroll_setting");	
 		$db->addfield("employee_id");		$db->addvalue($id);
 		$db->addfield("payroll_type_id");	$db->addvalue(1);
+		$db->addfield("payroll_item_id");	$db->addvalue($_POST["payroll_item_id"]);
 		$db->addfield("valid_at");			$db->addvalue($_POST["valid_at"]);
 		$db->addfield("name");				$db->addvalue($_POST["payroll_item_name"]);
 		$db->addfield("percentage");		$db->addvalue($_POST["percentage"]);
@@ -87,13 +140,30 @@
 		$db->addfield("taxable");			$db->addvalue($_POST["taxable"]);
 		$db->addfield("excluding_thp");		$db->addvalue($_POST["excluding_thp"]);
 		$inserting = $db->insert();
-		$_SESSION["alert_success"] = "Others updated successfully!";
+		
+		$_SESSION["alert_success"] = "Payrolls updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_others();",1500);</script><?php
 	}
 	
 	if(isset($_POST["edit_fixed"])){
 		$employee_payroll_setting_id = $_POST["employee_payroll_setting_id"];
 		$valid_at = $db->fetch_single_data("employee_payroll_setting","valid_at",["id" => $employee_payroll_setting_id]);
-
+		
+		if($_POST["payroll_item_id"] > 0) $payroll_item_name = $db->fetch_single_data("payroll_items","name",["id" => $_POST["payroll_item_id"]]);
+	    if($payroll_item_name != "") $_POST["payroll_item_name"] = $payroll_item_name;
+	    if(!$_POST["payroll_item_id"] && $_POST["payroll_item_name"]){//new payroll_items
+	    	$payroll_item_id = $db->fetch_single_data("payroll_items","id",["name" => $_POST["payroll_item_name"].":LIKE"]);
+	    	if($payroll_item_id <= 0){
+				$db->addtable("payroll_items");	
+				$db->addfield("payroll_type_id");	$db->addvalue(1);
+				$db->addfield("name");				$db->addvalue($_POST["payroll_item_name"]);
+				$inserting = $db->insert();
+				$_POST["payroll_item_id"] = $inserting["insert_id"];
+			} else {
+				$_POST["payroll_item_id"] = $payroll_item_id;
+			}
+	    }
+		
 		if($valid_at == $_POST["valid_at"]) $is_editing = true;
 		else $is_editing = false;
 
@@ -105,6 +175,7 @@
 			$db->addfield("payroll_type_id");	$db->addvalue(1);
 			$db->addfield("valid_at");			$db->addvalue($_POST["valid_at"]);
 		}
+		$db->addfield("payroll_item_id");	$db->addvalue($_POST["payroll_item_id"]);
 		$db->addfield("name");				$db->addvalue($_POST["payroll_item_name"]);
 		$db->addfield("percentage");		$db->addvalue($_POST["percentage"]);
 		$db->addfield("nominal");			$db->addvalue($_POST["nominal"]);
@@ -115,13 +186,17 @@
 		} else {
 			$inserting = $db->insert();
 		}
+		
+		$_SESSION["alert_success"] = "Payrolls updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_others();",1500);</script><?php
 	}
 	
 	if(isset($_POST["save_variable"]) || isset($_POST["save_tax"]) || isset($_POST["save_deduction"])){
 		if(isset($_POST["save_variable"])) $payroll_type_id = 2;
 		if(isset($_POST["save_tax"])) $payroll_type_id = 3;
 		if(isset($_POST["save_deduction"])) $payroll_type_id = 4;
-	    if($_POST["payroll_item_id"] > 0) $payroll_item_name = $db->fetch_single_data("payroll_items","name",["id" => $_POST["payroll_item_id"]]);
+		
+		if($_POST["payroll_item_id"] > 0) $payroll_item_name = $db->fetch_single_data("payroll_items","name",["id" => $_POST["payroll_item_id"]]);
 	    if($payroll_item_name != "") $_POST["payroll_item_name"] = $payroll_item_name;
 	    if(!$_POST["payroll_item_id"] && $_POST["payroll_item_name"]){//new payroll_items
 	    	$payroll_item_id = $db->fetch_single_data("payroll_items","id",["name" => $_POST["payroll_item_name"].":LIKE"]);
@@ -147,6 +222,9 @@
 		$db->addfield("taxable");			$db->addvalue($_POST["taxable"]);
 		$db->addfield("excluding_thp");		$db->addvalue($_POST["excluding_thp"]);
 		$inserting = $db->insert();
+		
+		$_SESSION["alert_success"] = "Payrolls updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_others();",1500);</script><?php
 	}
 	
 	if(isset($_POST["edit_variable"]) || isset($_POST["edit_tax"]) || isset($_POST["edit_deduction"])){
@@ -192,6 +270,9 @@
 		} else {
 			$inserting = $db->insert();
 		}
+		
+		$_SESSION["alert_success"] = "Payrolls updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_others();",1500);</script><?php
 	}
 ?>
 	<!--form -->
@@ -455,7 +536,6 @@
 				<div id="employee_others" style="display:none;">
 					<div style="overflow-x:auto;">
 						<div class="table_list" style="margin: 0 !important;">
-								<!--
 								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Default Fixed Income Setting</u></font>
 								<?php
 								echo $f->start();
@@ -483,7 +563,6 @@
 							
 								<hr>
 								<br>
-								-->
 								
 								<font style="font-size:18px; font-weight:bolder; color:#013fa5;"><u>Fixed Income Setting</u></font>
 								<?php
@@ -577,7 +656,7 @@
 											$db->addfield("payroll_type_id");	$db->addvalue($tax["payroll_type_id"]);
 											$db->addfield("payroll_item_id");	$db->addvalue($tax["id"]);
 											$db->addfield("name");				$db->addvalue($tax["name"]);
-											$db->addfield("valid_at");			$db->addvalue($employee["join_indohr_at"]);
+											$db->addfield("valid_at");			$db->addvalue($_DATA["join_indohr_at"]);
 											$db->addfield("percentage");		$db->addvalue($percentage);
 											$db->addfield("taxable");			$db->addvalue(1);
 											$db->addfield("excluding_thp");		$db->addvalue(0);
@@ -595,7 +674,7 @@
 										$_settings[$key]["payroll_type_id"] = $deduction["payroll_type_id"];
 										$_settings[$key]["payroll_item_id"] = $deduction["id"];
 										$_settings[$key]["name"] = $deduction["name"];
-										$_settings[$key]["valid_at"] = $employee["join_indohr_at"];
+										$_settings[$key]["valid_at"] = $_DATA["join_indohr_at"];
 										$percentage = 0;
 										if($key == 0) $percentage = 2;
 										if($key == 1) $percentage = 0.24;
@@ -613,7 +692,7 @@
 											$db->addfield("payroll_type_id");	$db->addvalue($deduction["payroll_type_id"]);
 											$db->addfield("payroll_item_id");	$db->addvalue($deduction["id"]);
 											$db->addfield("name");				$db->addvalue($deduction["name"]);
-											$db->addfield("valid_at");			$db->addvalue($employee["join_indohr_at"]);
+											$db->addfield("valid_at");			$db->addvalue($_DATA["join_indohr_at"]);
 											if($percentage > 0){
 												$db->addfield("percentage");	$db->addvalue($percentage);
 											}
@@ -640,6 +719,7 @@
 										$chk_taxable 			= $f->input("taxable","1","type='checkbox' style='width:20px; height:20px;' ".$checked);
 										$checked 				= ($fixed["excluding_thp"]=="1")?"checked":"";
 										$chk_excluding_thp 		= $f->input("excluding_thp","1","type='checkbox' style='width:20px; height:20px;' ".$checked);
+										$btn_save 				= $f->input("edit_deduction","Save","type='submit'","btn btn-primary");
 										$view_history 			= "<img src=\"images/folder.png\" style='width:30px; height:30px;' title='Open Window' data-toggle='modal' data-target='#window_boxs' onclick='SetPage(\"window_boxs/payroll_settings_history_list.php?id=".$_fixed["id"]."\")' >";
 										echo $t->row([$f->start().$no,$txt_payroll_item_id,$txt_valid_at,$txt_percentage,$txt_nominal,$chk_taxable,$chk_excluding_thp,$btn_save.$f->end(),$view_history]);
 									}

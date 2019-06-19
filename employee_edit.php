@@ -34,7 +34,7 @@
 		$updating = $db->update();
 		if($updating["affected_rows"] >= 0){
 			$_SESSION["alert_success"] = "Data updated successfully!";
-			 ?><script type="text/JavaScript">setTimeout("location.href = '<?=$__base_url;?>';",1500);</script><?php
+			?><script type="text/JavaScript">setTimeout("employee_details();",1500);</script><?php
 		} else {
 			$_SESSION["alert_danger"] = "Failed to saved!";
 		}
@@ -73,6 +73,7 @@
 		$updating = $db->update();
 
 		$_SESSION["alert_success"] = "Params updated successfully!";
+		?><script type="text/JavaScript">setTimeout("employee_params();",1500);</script><?php
 	}
 ?>
 	<!--form -->

@@ -477,14 +477,6 @@
 			generate_code('','employee_code','false','accepted_as_employee_go()',1);
 		}
 	}
-
-	// function accepted_as_employee_go(){
-		// window.location = "candidate_view.php?accepted_as_employee=1&id=<?=$_GET["id"];?>&code="+document.getElementById("employee_code").value+"&join_at="+document.getElementById("join_at").value;
-	// }
-	
-	// function window_success(){
-		// alert();
-	// }
 </script>
 <?php 
 	if($_GET["printme"] != 1){
