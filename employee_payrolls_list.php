@@ -36,7 +36,7 @@
 	
 	if(!$_isexport){
 	?>
-	<!--Filter--
+	<!--Filter-->
 	<div class="modal fade" id="filter_box" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
@@ -55,20 +55,8 @@
 								<?=$f->input("name",@$_GET["name"],"","form-control");?>
 							</div>
 							<div class="form-group">
-								<p class="mb-2">Year of Brithdate</p>
-								<?=$f->input("year",@$_GET["year"],"type='number'","form-control");?>
-							</div>
-							<div class="form-group">
-								<p class="mb-2">Sex</p>
-								<?=$f->select("sex",[""=>"","M"=>"M","F"=>"F"],@$_GET["sex"],"","select_filter");?>
-							</div>
-							<div class="form-group">
-								<p class="mb-2">Marital Status</p>
-								<?=$f->select("status_id",$db->fetch_select_data("statuses","id","name",[],[],"",true),@$_GET["status_id"],"","select_filter");?>
-							</div>
-							<div class="form-group">
-								<p class="mb-2">Address</p>
-								<?=$f->input("address",@$_GET["address"],"","form-control");?>
+								<p class="mb-2">Periode</p>
+								<?=$f->input("periode",date("Y-m",strtotime($_GET["periode"])),"type='month'","form-control");?>
 							</div>
 							<?=$f->input("page","1","type='hidden'");?>
 							<?=$f->input("sort",@$_GET["sort"],"type='hidden'");?>
@@ -96,10 +84,10 @@
 			
 			<?php
 				$whereclause = "";
-				if(@$_GET["code"]!="") $whereclause .= "(employee_id IN (SELECT id FROM employees WHERE code LIKE'%".$_GET["code"]."%')) AND ";
+				// if(@$_GET["code"]!="") $whereclause .= "(employee_id IN (SELECT id FROM employees WHERE code LIKE'%".$_GET["code"]."%')) AND ";
 				if(@$_GET["name"]!="") $whereclause .= "(employee_id IN (SELECT id FROM employees WHERE name LIKE '%".$_GET["name"]."%')) AND ";
 				if(@$_GET["periode"]!="") $whereclause .= "(periode LIKE '".$_GET["periode"]."%') AND ";
-				if(@$_GET["project"]!="") $whereclause .= "(employee_id IN (SELECT employee_id FROM employee_payroll_params WHERE param LIKE 'Project' AND params_value = '".$_GET["project"]."')) AND ";
+				// if(@$_GET["project"]!="") $whereclause .= "(employee_id IN (SELECT employee_id FROM employee_payroll_params WHERE param LIKE 'Project' AND params_value = '".$_GET["project"]."')) AND ";
 				$whereclause .=(substr($whereclause,0,-4))." GROUP BY employee_id AND ";
 				
 				$db->addtable("employee_payrolls");
@@ -131,6 +119,7 @@
 								if(!$_isexport) array_push($arr_header,"Actions");
 								array_push($arr_header,"Code");
 								array_push($arr_header,"Name");
+								array_push($arr_header,"Periode");
 								if(!$_export_bank) array_push($arr_header,"Fixed Income");
 								if(!$_export_bank) array_push($arr_header,"Variable Income");
 								if(!$_export_bank) array_push($arr_header,"Tax");
@@ -160,6 +149,7 @@
 									if(!$_isexport) array_push($arr_row,$actions);
 									array_push($arr_row,$employee["code"]);
 									array_push($arr_row,$employee["name"]);
+									array_push($arr_row,date("M-Y",strtotime($employee_payroll["periode"])));
 									if(!$_export_bank) array_push($arr_row,format_amount($fixed));
 									if(!$_export_bank) array_push($arr_row,format_amount($variable));
 									if(!$_export_bank) array_push($arr_row,format_amount($tax));
@@ -172,6 +162,7 @@
 
 									array_push($arr_row_attr,"align='right' valign='top'");
 									if(!$_isexport) array_push($arr_row_attr,"");
+									array_push($arr_row_attr,"");
 									array_push($arr_row_attr,"");
 									array_push($arr_row_attr,"");
 									if(!$_export_bank) array_push($arr_row_attr,"align='right' valign='top'");
