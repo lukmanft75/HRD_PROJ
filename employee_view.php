@@ -169,11 +169,11 @@
 										</tr>
 										<tr>
 											<td colspan="2" width="33.2%" align="center" nowrap>BPJS Ketenagakerjaan No.</td>
-											<td colspan="4" width="66.8%" align="center"></td>
+											<td colspan="4" width="66.8%" align="center"><?=$db->fetch_single_data("bpjs","bpjs_id",["employee_id"=>$employee["id"],"bpjs_type" => '2',"pisa" => "peserta"]);?></td>
 										</tr>
 										<tr>
 											<td colspan="2" width="33.2%" align="center" nowrap>BPJS Kesehatan No.</td>
-											<td colspan="4" width="66.8%" align="center"></td>
+											<td colspan="4" width="66.8%" align="center"><?=$db->fetch_single_data("bpjs","bpjs_id",["employee_id"=>$employee["id"],"bpjs_type" => '1',"pisa" => "peserta"]);?></td>
 										</tr>
 									</table>
 								</td>

@@ -267,7 +267,7 @@
 					$PPh21_Pendapatan_Tetap_30 = ($PPh21_Pendapatan_Tetap_30 - 500000000) * 30/100;
 				else
 					$PPh21_Pendapatan_Tetap_30 = 0;
-			} else {
+			} else { //tidak punya NPWP maka besar persentase ditambah 20% nya
 				//PPh21_Pendapatan_Tetap_5
 				if($PendapatanTetapKenaPajakSetahun < 0)
 					$PPh21_Pendapatan_Tetap_5 = 0;

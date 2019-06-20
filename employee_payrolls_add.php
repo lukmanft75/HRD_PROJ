@@ -35,36 +35,27 @@
 				<?=$f->end();?>
 
 				<?php
-				//////
-				//////
-				//////
-					// echo substr($_GET["periode"],0,4)." --- ".substr($_GET["periode"],5,2);
-					// $settings = $db->fetch_all_data("employee_payroll_setting",[],"employee_id='".$employee_id."' AND payroll_type_id='1' AND valid_at <= '".$_periode."' AND (percentage <> 0 OR nominal <> 0) GROUP BY payroll_item_id","payroll_item_id");
-					// echo $db->get_last_query();
-					// $settings = $db->fetch_all_data("employee_payroll_setting",[],"employee_id='".$employee_id."' AND payroll_type_id='2' AND valid_at <= '".$_periode."' AND (percentage <> 0 OR nominal <> 0) GROUP BY payroll_item_id","id");					
-					// $fixeds = $db->fetch_all_data("employee_payroll_setting",[],"employee_id = '".$id."' AND payroll_type_id='1' AND payroll_item_id = 0 GROUP BY name","id");
-				//////
-				//////
-				//////
-				
-				
 					if(isset($_GET["generate"])){
-						if(isset($_GET["employee_id"]))
-							$employees = $db->fetch_all_data("employees",[],"id='".$_GET["employee_id"]."'");
-						else
-							// $employees = $db->fetch_all_data("employees",[],"id IN (SELECT employee_id FROM employee_payroll_params WHERE param LIKE 'Project' AND params_value = '".$_GET["project"]."')");
-							$employees = $db->fetch_all_data("employees",[],"id IN (SELECT employee_id FROM employee_payroll_params)");
-						
-						
-						foreach($employees as $key => $employee){
-							// $current_project_id = $db->fetch_single_data("employee_payroll_params","params_value",["employee_id" => $employee["id"],"param" => "Project:LIKE","valid_at" => $_periode.":<="],["valid_at DESC","id DESC"]);
-							$current_project_id = $db->fetch_single_data("employee_payroll_params","params_value",["employee_id" => $employee["id"],"valid_at" => $_periode.":<="],["valid_at DESC","id DESC"]);
+						if(date("Y-m") < $_GET["periode"]){
+							echo "Date cannot exceed this time!";
+						} else {
+							if(isset($_GET["employee_id"]))
+								$employees = $db->fetch_all_data("employees",[],"id='".$_GET["employee_id"]."'");
+							else
+								// $employees = $db->fetch_all_data("employees",[],"id IN (SELECT employee_id FROM employee_payroll_params WHERE param LIKE 'Project' AND params_value = '".$_GET["project"]."')");
+								$employees = $db->fetch_all_data("employees",[],"id IN (SELECT employee_id FROM employee_payroll_params)");
+							
+							
+							foreach($employees as $key => $employee){
+								// $current_project_id = $db->fetch_single_data("employee_payroll_params","params_value",["employee_id" => $employee["id"],"param" => "Project:LIKE","valid_at" => $_periode.":<="],["valid_at DESC","id DESC"]);
+								$current_project_id = $db->fetch_single_data("employee_payroll_params","params_value",["employee_id" => $employee["id"],"valid_at" => $_periode.":<="],["valid_at DESC","id DESC"]);
 
-							// if($current_project_id == $_GET["project"]){//make sure last project is valid
-								$no++;
-								$generating = generate_payroll($_GET["periode"],$employee["id"]);
-								echo $no.". ".$employee["code"]." -- ".$employee["name"]." ==> ".$generating["result"]."&nbsp;<b><a target='_BLANK' href=\"employee_payrolls_view.php?employee_id=".$employee["id"]."&periode=".$_GET["periode"]."-01"."\" style='color:#013fa5; font-weight:bolder; font-style:italic;'>View</a></b><br>";
-							// }
+								// if($current_project_id == $_GET["project"]){//make sure last project is valid
+									$no++;
+									$generating = generate_payroll($_GET["periode"],$employee["id"]);
+									echo $no.". ".$employee["code"]." -- ".$employee["name"]." ==> ".$generating["result"]."&nbsp;<b><a target='_BLANK' href=\"employee_payrolls_view.php?employee_id=".$employee["id"]."&periode=".$_GET["periode"]."-01"."\" style='color:#013fa5; font-weight:bolder; font-style:italic;'>View</a></b><br>";
+								// }
+							}
 						}
 					}
 				?>

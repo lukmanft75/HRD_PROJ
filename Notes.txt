@@ -1,0 +1,89 @@
+Untuk HRD Proj
+	Payroll jika sudah tercreate maka tidak bisa digenerate ulang
+	jika awal tahun, maka pastikan join date employee sudah dimulai pada bulan ke 1
+	
+======================================================================================
+PENDAPATAN TETAP
+	BASIC SALARY			= 
+	JKK 0,24%				= sumber : https://www.bpjsketenagakerjaan.go.id/page/Program-Jaminan-Kecelakaan-Kerja-(JKK).html
+		1. tingkat risiko sangat rendah 0,24 % dari upah sebulan
+		2. tingkat risiko rendah 0,54 % dari upah sebulan
+		3. tingkat risiko sedang 0,89 % dari upah sebulan
+		4. tingkat risiko tinggi 1,27 % dari upah sebulan
+		5. tingkat risiko sangat tinggi 1,74 % dari upah sebulan
+
+	JKM 0,3% (jamsostek)	= sumber : https://www.bpjsketenagakerjaan.go.id/page/Program-Jaminan-Kematian-(JKM).html
+		Pekerja Penerima Upah : 0.3 % (dari upah yang dilaporkan)
+		Upah sebulan, yaitu terdiri atas upah pokok & tunjangan tetap
+		
+	01__JHT 3,7% (jamsostek)	= sumber : https://www.bpjsketenagakerjaan.go.id/page/Program-Jaminan-Hari-Tua-(JHT).html
+		5,7% dari upah( 2% pekerja & 3,7% pemberi kerja)
+		Upah sebulan, yaitu terdiri atas upah pokok & tunjangan tetap
+		
+	Iuran BPJS Kesehatan PK 4%	= sumber :  https://bpjs-kesehatan.go.id/bpjs/index.php/pages/detail/2014/13
+		Iuran bagi Peserta Pekerja Penerima Upah yang bekerja di BUMN, BUMD dan Swasta sebesar 5% ( lima persen) dari Gaji atau Upah per bulan dengan ketentuan : 4% (empat persen) dibayar oleh Pemberi Kerja dan 1% (satu persen) dibayar oleh Peserta.
+		Iuran untuk keluarga tambahan Pekerja Penerima Upah yang terdiri dari anak ke 4 dan seterusnya, ayah, ibu dan mertua, besaran iuran sebesar sebesar 1% (satu persen) dari dari gaji atau upah per orang per bulan, dibayar oleh pekerja penerima upah.
+		Upah sebulan, yaitu terdiri atas upah pokok & tunjangan tetap
+		
+	02__Jaminan Pensiun PK 2%	= 
+		Iuran program jaminan pensiun dihitung sebesar 3%, yang terdiri atas 2% iuran pemberi kerja dan 1% iuran pekerja.
+		Upah sebulan, yaitu terdiri atas upah pokok & tunjangan tetap
+	
+PENDAPATAN TIDAK TETAP
+	THR
+	Insentiv
+	Allowance
+	Tunj. Pajak
+	
+TAX
+	01__JHT 2% (JAMSOSTEK)
+		5,7% dari upah( 2% pekerja & 3,7% pemberi kerja)
+		Upah sebulan, yaitu terdiri atas upah pokok & tunjangan tetap
+		
+		
+	02__JAMINAN PENSIUN BPJS TK 1%		
+		Iuran program jaminan pensiun dihitung sebesar 3%, yang terdiri atas 2% iuran pemberi kerja dan 1% iuran pekerja.
+		Upah sebulan, yaitu terdiri atas upah pokok & tunjangan tetap
+		
+	OPERATIONAL DEDUCTION(biaya jabatan) = sumber : https://klikpajak.id/biaya-jabatan-pph-21/
+		sebesar 0,05% dari upah atau maksimal rp. 500.000/bulan
+		
+	NON TAXABLE DEDUCTION (PTKP)
+		
+	ANNUITY FIXED INCOME (Pendapatan Tetap Setahun)
+		=(upah - jht 2% - j.pensiun 1% - jabatan) * (durasi bulan berjalan)
+		
+	ANNUITY FIXED INCOME BEFORE TAX	(Pendapatan Tetap Kena Pajak Setahun)
+		=pendapatan tetap setahun - PTKP
+		
+	ANNUITY FIXED INCOME TAX (Pendapatan Tetap Kena Pajak Setahun)
+		Penghasilan Netto Kena Pajak pengkalinya oleh Pendapatan Tetap Kena Pajak Setahun
+		Tarif Pajak
+		Sampai dengan 50 juta ============ 5%
+		50 juta sampai dengan 250 juta ========= 15%
+		250 juta sampai dengan 500 juta ===========	25%
+		Diatas 500 juta ============= 30%
+				/////all lihat contoh perhitungan persentasenya di excel pph 21
+
+	YTD FIXED INCOME TAX (PPh21 Pendapatan Tetap s/d Bulan Berjalan)	
+		= total penjumlahan pajak pajak setahun (baris 54)    *    (durasi bulan berjalan / bulan risen (atau akhir tahun jika tidak risen))
+		
+	YTD VARIABLE INCOME TAX	(Pendapatan Tetap Tidak Kena Pajak)
+		
+		
+		
+	YTD INCOME TAX		
+	YTD INCOME TAX UNTIL LAST MONTH		
+	INCOME TAX		
+	
+
+DEDUCTION	AMOUNT	YTD	
+	JHT 2% (JAMSOSTEK)
+	JKK (KOREKSI)
+	JKM (KOREKSI)
+	THT 3.7% (KOREKSI)
+	JAMINAN PENSIUN BPJS PK 2% (KOREKSI)
+	JAMINAN PENSIUN BPJS TK 1%	
+	IURAN PK 4% (KOREKSI)	
+	IURAN TK 1 %	
+	TAX INCOME
